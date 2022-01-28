@@ -1,9 +1,13 @@
-export default class Render {
-    constructor(canvas) {
+export default class Game {
+    constructor({
+        canvas,
+        socket
+    }) {
         this._canvas = canvas;
         this._ctx = canvas.getContext('2d');
+        this._socket = socket;
     }
-    render() {
+    start() {
         // render tiles
 
         // render chars

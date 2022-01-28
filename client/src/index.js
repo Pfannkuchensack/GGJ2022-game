@@ -1,6 +1,17 @@
 import './main.scss';
-import './Render.js';
-import Render from "./Render";
+import Game from "./Game";
 
-new Render(document.getElementById('canvas'))
-    .render();
+const io = require("socket.io-client");
+const socket = io(":5000/socket");
+
+socket.on("connect", () => {
+    console.log('connected', socket.id);
+});
+socket.on("disconnect", () => {
+    console.log('disconnected', socket.id);
+});
+
+new Game({
+    canvas: document.getElementById('canvas'),
+    socket
+}).start();
