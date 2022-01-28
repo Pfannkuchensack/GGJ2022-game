@@ -2,6 +2,7 @@
   "dependencies": {
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
+    "laravel-mix": "^6.0.41",
     "redis": "^4.0.2",
     "socket.io": "^4.4.1"
   }
