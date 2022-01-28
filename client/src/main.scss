@@ -1,0 +1,23 @@
+html, body{
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+body{
+  background-color: #222;
+  color: #fff;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+#app{
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+  #canvas{
+    border: none !important;
+    box-sizing: border-box;
+    flex-grow: 1;
+    background-color: #000;
+    //aspect-ratio: 16/9;
+  }
+}
