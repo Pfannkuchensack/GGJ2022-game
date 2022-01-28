@@ -20,7 +20,7 @@ var log = function () { return console.log.apply(console, ['[' + new Date().toIS
 const redis = require('redis');
 const io = require('socket.io')(server);
 const { argv } = require('process');
-server.listen(8040);
+server.listen(8010);
 log('Starte Websocket Server');
 
 process.on('uncaughtException', function (e) {
@@ -60,10 +60,11 @@ const redispub = redis.createClient({ host: process.env.REDIS_HOST, port: 6379, 
 
 io.on('connection', function (socket) {
 	// var hostname = socket.handshake.headers.host.toLowerCase();
-	socket.once('connect', function (data) {
+	socket.on('go', function (data) {
 		redisClient.subscribe('game:' + data.gameid);
 		redisClient.addListener('message', NewMsg);
-		clients[socket.id] = { socket: socket.id, lobby: data.gameid, color: data.color };
+		clients[socket.id] = { socket: socket.id, lobby: data.gameid, charId: data.charid };
+		log('Neuer Client', socket.id, data);
 	});
 
 	socket.on('game', function (message) {
@@ -71,7 +72,7 @@ io.on('connection', function (socket) {
 		redispub.publish('game:' + clients[socket.id].lobby, JSON.stringify(message));
 	});
 
-	socket.once('disconnect', reason => {
+	socket.on('disconnect', reason => {
 		delete clients[socket.id];
 		redisClient.removeListener('message', NewMsg);
 		// @TODO: Prüfen ob noch jemand anders in der Lobby ist fehlt hier noch
@@ -82,7 +83,7 @@ io.on('connection', function (socket) {
 		if (channel == 'game:' + clients[socket.id].lobby) {
 			try {
 				const obj = JSON.parse(message);
-				if (obj.C !== clients[socket.id].color) {
+				if (obj.charId !== clients[socket.id].charid) {
 					socket.emit('game', message);
 					//log(message);
 				}
