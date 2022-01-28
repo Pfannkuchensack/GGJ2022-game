@@ -1,1 +1,1 @@
-# GMTK2022-game
+# GGJ2022-game
