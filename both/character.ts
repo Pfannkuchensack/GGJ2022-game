@@ -69,12 +69,12 @@ class Character {
         return this._itemNames;
     }
 
-    addItem(itemName: string) {
+    addItem(itemName: string): boolean {
         this._itemNames.push(itemName);
         return true;
     }
 
-    removeItem(itemName: string) {
+    removeItem(itemName: string): boolean {
         const indexOf = this._itemNames.indexOf(itemName);
         if (indexOf !== -1) {
             this._itemNames.splice(indexOf, 1);
@@ -84,33 +84,19 @@ class Character {
         return false;
     }
 
-    attackChar(attackName: string, otherChar: Character) {
-        // from config
-        // -> attack
-        const selectedAttack = {
-            repeats: 5,
-            damage: 5
-        };
-        // otherChar select attack (anzahl * damage * trefferchance)
-        // -> from config
-        const otherCharAttack = {
-            repeats: 3,
-            damage: 5
-        };
-        // todo: add item stuff
-
+    attackChar(attackName: string, otherChar: Character, dryRun: boolean, config: { attacks: { [key: string]: { repeats: number, damage: number } } }) {
         const challenger = {
             char: this,
-            attack: selectedAttack,
+            attack: config[attackName],
             health: this.hp,
-            remainingRepetitions: selectedAttack.repeats
+            remainingRepetitions: config[attackName].repeats
         }
 
         const challenged = {
             char: otherChar,
-            attack: otherCharAttack,
+            attack: config[otherChar.attacks[0]],
             health: otherChar.hp,
-            remainingRepetitions: otherCharAttack.repeats
+            remainingRepetitions: config[otherChar.attacks[0]].repeats
         }
 
         const maxRounds = Math.max(challenger.remainingRepetitions, challenged.remainingRepetitions);
@@ -161,14 +147,24 @@ class Character {
             }
         }
 
-        return history;
+        if (!dryRun) {
+            challenger.char._hp = Math.max(0, challenger.health)
+            challenged.char._hp = Math.max(0, challenged.health)            
+        }
+
+        return {
+            history: history,
+            challenger: challenger,
+            challenged: challenged,
+        };
     }
 
-    _calcTurn(attacker: { remainingRepetitions: number, attack: { damage: number } }, defender: { health: number }) {
+    _calcTurn(attacker: { remainingRepetitions: number, attack: { damage: number } }, defender: { health: number }): number {
         const damage = attacker.attack.damage;
 
         // todo: add level
         // todo: add resistance
+        // todo: add item stuff to attack
 
         defender.health = damage;
         attacker.remainingRepetitions--;
