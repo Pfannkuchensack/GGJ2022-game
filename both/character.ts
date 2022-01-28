@@ -84,7 +84,7 @@ class Character {
         return false;
     }
 
-    attackChar(attackName: string, otherChar: Character, dryRun: boolean, config: { attacks: { [key: string]: { repeats: number, damage: number } } }) {
+    attackChar(attackName: string, otherChar: Character, dryRun: boolean, config: { attacks: { [key: string]: { repeats: number, damage: number } } }): any {
         const challenger = {
             char: this,
             attack: config[attackName],
