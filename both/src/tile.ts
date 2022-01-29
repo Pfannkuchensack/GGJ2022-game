@@ -1,6 +1,9 @@
-class Tile {
+export class Tile {
+    _name: string;
+    _movementCost: number;
+    _defenseBonus: number;
 
-    constructor(name, movementCost, defenseBonus) {
+    constructor(name: string, movementCost: number, defenseBonus: number) {
         this._name = name;
         this._movementCost = movementCost;
         this._defenseBonus = defenseBonus;

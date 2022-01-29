@@ -1,4 +1,37 @@
-class Character {
+import { Tile } from './tile'
+
+export type Attack = {
+    repeats: number;
+    damage: number;
+}
+
+export type AttacksConfig = {
+    [key: string]: Attack;
+}
+
+export type BattleHistory = {
+    attacker: BattleParticipant;
+    defender: BattleParticipant;
+    damage: number;
+    isDefenderDead: boolean;
+}
+
+export type BattleLog = {
+    isDryRun: boolean;
+    history: BattleHistory[];
+    challenger: BattleParticipant;
+    challenged: BattleParticipant;
+}
+
+export type BattleParticipant = {
+    char: Character;
+    tile: Tile;
+    attack: Attack;
+    health: number;
+    remainingRepetitions: number;
+}
+
+export class Character {
     _level: number;
     _xp: number;
     _hp: number;
@@ -70,6 +103,10 @@ class Character {
     }
 
     addItem(itemName: string): boolean {
+        if (this._itemNames.length >= 6) {
+            return false
+        }
+
         this._itemNames.push(itemName);
         return true;
     }
@@ -84,24 +121,44 @@ class Character {
         return false;
     }
 
-    attackChar(attackName: string, otherChar: Character, dryRun: boolean, config: { attacks: { [key: string]: { repeats: number, damage: number } } }): any {
+    get defendAttackName(): string | null {
+        if (this.attacks.length == 0) {
+            return null
+        }
+
+        return this.attacks[0]
+    }
+
+    attackChar(attackName: string, tile: Tile, otherChar: Character, otherCharTile: Tile, dryRun: boolean, config: { attacks: AttacksConfig }): BattleLog {
         const challenger = {
             char: this,
-            attack: config[attackName],
+            tile: tile,
+            attack: config.attacks[attackName],
             health: this.hp,
-            remainingRepetitions: config[attackName].repeats
+            remainingRepetitions: config.attacks[attackName].repeats
+        }
+
+        const challengedAttackname = otherChar.defendAttackName
+        let challengedAttack = {
+            repeats: 0,
+            damage: 0
+        } as Attack
+
+        if (challengedAttackname != null) {
+            challengedAttack = config.attacks[challengedAttackname]
         }
 
         const challenged = {
             char: otherChar,
-            attack: config[otherChar.attacks[0]],
+            tile: otherCharTile,
+            attack: config.attacks[otherChar.attacks[0]],
             health: otherChar.hp,
-            remainingRepetitions: config[otherChar.attacks[0]].repeats
+            remainingRepetitions: challengedAttack.repeats
         }
 
-        const maxRounds = Math.max(challenger.remainingRepetitions, challenged.remainingRepetitions);
+        const maxRounds = challenger.remainingRepetitions + challenged.remainingRepetitions;
 
-        const history = [];
+        const history = [] as BattleHistory[];
 
         let turn = "self";
         for (let round = 1; round <= maxRounds; round++) {
@@ -153,20 +210,22 @@ class Character {
         }
 
         return {
+            isDryRun: dryRun,
             history: history,
             challenger: challenger,
             challenged: challenged,
         };
     }
 
-    _calcTurn(attacker: { remainingRepetitions: number, attack: { damage: number } }, defender: { health: number }): number {
+    _calcTurn(attacker: BattleParticipant, defender: BattleParticipant): number {
         const damage = attacker.attack.damage;
 
         // todo: add level
         // todo: add resistance
         // todo: add item stuff to attack
+        // todo: add tile defense bonus
 
-        defender.health = damage;
+        defender.health -= damage;
         attacker.remainingRepetitions--;
 
         return damage;
