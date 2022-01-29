@@ -140,11 +140,11 @@ describe('character', () => {
 
 			const attackerChar = new Character('charId', 10, 10, 10, 10);
 			attackerChar._attackNames.push("attack1")
-			const tile = new Tile("gras", 1, 0)
+			const tile = new Tile("gras", 1, 0, 10, 10)
 
 			const defenderChar = new Character('charId', 10, 10, 10, 10);
 			defenderChar._attackNames.push("attack2")
-			const defenderCharTile = new Tile("gras", 1, 0)
+			const defenderCharTile = new Tile("gras", 1, 0, 11, 10)
 
 			const result = attackerChar.attackChar("attack1", tile, defenderChar, defenderCharTile, false, config)
 			// history check, stop if one char is dead
@@ -175,11 +175,11 @@ describe('character', () => {
 
 			const attackerChar = new Character('charId', 10, 10, 10, 10);
 			attackerChar._attackNames.push("attack1")
-			const attackerTile = new Tile("gras", 1, 0)
+			const attackerTile = new Tile("gras", 1, 0, 10, 10)
 
 			const defenderChar = new Character('charId', 10, 10, 10, 10);
 			defenderChar._attackNames.push("attack2")
-			const defenderTile = new Tile("gras", 1, 0)
+			const defenderTile = new Tile("gras", 1, 0, 11, 10)
 
 			const result = attackerChar.attackChar("attack1", attackerTile, defenderChar, defenderTile, false, config)
 			// history check, stop if one char is dead
