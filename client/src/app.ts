@@ -1,5 +1,6 @@
 import { io, Socket } from "socket.io-client";
 import { GameMap } from '../../both/src/map';
+import { Character } from '../../both/src/character';
 import { Renderer } from './render'
 
 window.addEventListener('load', () => {
@@ -79,15 +80,19 @@ class App {
 			return;
 		}
 
+		const char = new Character("", 0, 0, 0, 0)
+		char.import(event.data)
+
 		switch (event.actiontype) {
-			case 'createChar':
-				this._map.addChar(event.data);
+			case 'addChar':
+				this._map.addChar(char);
+				console.log(this._map._chars)
 				break;
 			case 'move':
-				this._map.updateChar(event.data);
+				this._map.updateChar(char);
 				break;
 			default:
-				console.log("?!?!?!?!ß111elf", event.actiontype, event.data);
+				console.log("?!?!?!?!ß111elf", event.actiontype, char);
 		}
 	}
 }
@@ -103,8 +108,9 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 	});
 
 	socket.on('game', (data) => {
-		console.log("socketIO[game]:", data);
-		app.reciveState(data);
+		const msg = JSON.parse(data);
+		console.log("socketIO[game]:", msg);
+		app.reciveState(msg);
 	});
 
 	canvas.addEventListener('click', (event) => {

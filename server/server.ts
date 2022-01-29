@@ -154,7 +154,7 @@ log('hi!');
 		}
 
 		const char = new Character(client.socketId, 1, 0, 100, 3);
-		char.setPosition(10, 10);
+		char.setPosition(2, 2);
 		char.addAttack(action.attack, gameConfig);
 		// todo: add resistance
 
@@ -165,7 +165,7 @@ log('hi!');
 		client.charId = char.id
 
 		// broadcast
-		redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'addChar', 'data': char }));
+		redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'addChar', 'data': char.export }));
 		log("createChar:", "char created.", client.charId, char);
 	}
 
@@ -185,7 +185,7 @@ log('hi!');
 				return;
 			}
 			// broadcast
-			redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'move', 'data': char }));
+			redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'move', 'data': char.export }));
 			log("moveChar:", "char moved.", client.charId, char);
 		}
 	}
@@ -206,7 +206,7 @@ log('hi!');
 				return;
 			}
 			// broadcast
-			redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'finishturn', 'data': char }));
+			redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'finishturn', 'data': char.export }));
 			log("moveChar:", "finish turn.", client.charId, char);
 		}
 	}

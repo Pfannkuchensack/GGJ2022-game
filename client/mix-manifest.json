@@ -7,5 +7,9 @@
     "/dist/assets/jet_red.png": "/dist/assets/jet_red.png",
     "/dist/assets/tile.png": "/dist/assets/tile.png",
     "/dist/assets/tile_ground.png": "/dist/assets/tile_ground.png",
-    "/dist/assets/test80Hover.png": "/dist/assets/test80Hover.png"
+    "/dist/assets/test80Hover.png": "/dist/assets/test80Hover.png",
+    "/dist/assets/attack.mp3": "/dist/assets/attack.mp3",
+    "/dist/assets/jet_green.png": "/dist/assets/jet_green.png",
+    "/dist/assets/level_up.mp3": "/dist/assets/level_up.mp3",
+    "/dist/assets/pick_up.mp3": "/dist/assets/pick_up.mp3"
 }
