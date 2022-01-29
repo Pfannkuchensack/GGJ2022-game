@@ -22,7 +22,7 @@ export class Game {
 		return this._currentPosition === -1
 	}
 
-	finishTurn(char: Character): boolean{
+	finishTurn(char: Character): boolean {
 		if (this.isAITurn) {
 			this._currentPosition++;
 			return true;
@@ -49,7 +49,7 @@ export class Game {
 	}
 
 	getChar(charId: string): Character | undefined {
-		for(let index = 0; index < this._chars.length; index++) {
+		for (let index = 0; index < this._chars.length; index++) {
 			if (this._chars[index].id === charId) {
 				return this._chars[index]			
 			}
@@ -101,7 +101,7 @@ export class Game {
 			return false
 		}
 
-		if ((nextPos.q-1 === char.position.q || nextPos.q+1 === char.position.q) && (nextPos.r-1 === char.position.r || nextPos.r+1 === char.position.r)) {
+		if ([char.position.q - 1, char.position.q, char.position.q + 1].indexOf(nextPos.q) === -1 || [char.position.r - 1, char.position.r, char.position.r + 1].indexOf(nextPos.q) === -1) {
 			console.log('field not neighboring!');
 			return false;
 		}

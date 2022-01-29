@@ -90,9 +90,24 @@ describe('game', () => {
 
 			game._currentPosition = 0;
 
-			const isSuccess = game.moveChar(char1, { q: 10, r: 10 })
+			const isSuccess = game.moveChar(char1, { q: 2, r: 1 })
 			assert.equal(isSuccess, true, "players turn!")
-			assert.deepEqual(char1.position, { q: 10, r: 10 })
+			assert.deepEqual(char1.position, { q: 2, r: 1 })
+		})
+
+		it('not a neighbor field', () => {
+			const map = new GameMap()
+			const game = new Game('gameId', map)
+
+			const char1 = new Character('char1', 1, 1, 100, 10)
+			game.addChar(char1)
+			char1.setPosition(1, 1)
+
+			game._currentPosition = 0;
+
+			const isSuccess = game.moveChar(char1, { q: 5, r: 1 })
+			assert.equal(isSuccess, false, "detect neighbor field")
+			assert.deepEqual(char1.position, { q: 1, r: 1 })
 		})
 	})
 

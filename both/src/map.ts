@@ -34,9 +34,12 @@ export class GameMap {
 
 	// neededMovepoints return 0 if not possible to move on this tile
 	neededMovepoints(pos: { q: number, r: number }): number {
-		// todo: check tile
+		const tile = this.getTile(pos)
+		if (tile === undefined) {
+			return 0
+		}
 
-		return 1;
+		return tile.movementCost;
 	}
 
 	getTile(pos: { q: number, r: number }): Tile | undefined {
@@ -56,7 +59,7 @@ export class GameMap {
 
 	getCharAt(q: number, r: number): Character | undefined {
 		for (let index = 0; index < this._chars.length; index++) {
-			if (this._chars[index].equalPosition({q:q, r:r})) {
+			if (this._chars[index].equalPosition({ q: q, r: r })) {
 				return this._chars[index]
 			}
 		}

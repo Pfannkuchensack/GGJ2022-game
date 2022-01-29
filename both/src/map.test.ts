@@ -31,7 +31,6 @@ describe('map', () => {
 		})
 	})
 
-
 	describe('char managment', () => {
 		it('add char', () => {
 			const map = new GameMap()
@@ -72,6 +71,18 @@ describe('map', () => {
 			assert.equal(map._chars.length, 2)
 			assert.equal(map._chars[0], char2)
 			assert.equal(map._chars[1], char3)
+		})
+	})
+
+	describe('needed movepoints', () => {
+		it('tile found', () => {
+			const map = new GameMap()
+			assert.equal(map.neededMovepoints({ q: 5, r: 5 }), 1)
+		})
+
+		it('tile not found', () => {
+			const map = new GameMap()
+			assert.equal(map.neededMovepoints({ q: 5, r: 5000 }), 0)
 		})
 	})
 })
