@@ -10,13 +10,12 @@ services:
     working_dir: /home/node/app/
     environment:
       - NODE_ENV=production
+      - REDIS_HOST=redis
     command: sh -c 'npm i && nodejs server.js'
     links:
       - redis
     depends_on:
       - redis
-    env_file:
-      - ./server/.env
   redis:
     image: redis:alpine
     expose:

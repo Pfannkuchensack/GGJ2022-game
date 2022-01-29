@@ -68,14 +68,13 @@ io.on('connection', function (socket) {
 			redispub.publish('game:' + clients[socket.id].lobby, JSON.stringify(message));
 		});
 		//redisClient.addListener('message', NewMsg);
-		
+
 		clients[socket.id] = { socket: socket.id, lobby: data.gameid, charId: data.charid };
 		log('Neuer Client', socket.id, data);
 	});
 
 	socket.on('game', function (message) {
 		console.log('game:' + clients[socket.id].lobby, JSON.stringify(message));
-		
 	});
 
 	socket.on('disconnect', reason => {
