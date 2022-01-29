@@ -5,6 +5,7 @@ import { Server as SocketIO } from 'socket.io';
 import { Game } from '../both/src/game';
 import { GameMap } from '../both/src/map';
 import { Character, AttacksConfig } from '../both/src/character';
+import { Item } from '../both/src/item';
 
 // log helper
 var log = function (...args: any[]) { return console.log.apply(console, ['[' + new Date().toISOString().slice(11, -5) + ']'].concat(Array.prototype.slice.call(arguments))); };
@@ -209,6 +210,39 @@ log('hi!');
 			redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'finishturn', 'data': char.export }));
 			log("moveChar:", "finish turn.", client.charId, char);
 		}
+	}
+
+	function collectItem(client: GameClient, item: Item){
+		if (client.charId === undefined) {
+			log("createChar:", "client has no charId :(((", client.socketId);
+			return;
+		}
+		const char = games[client.gameId].getChar(client.charId);
+
+		redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'collectitem', 'data': item }));
+		log("collectItem:", "item collected:", client.charId, item);
+	}
+
+	function dropItem(client: GameClient, item: Item){
+		if (client.charId === undefined) {
+			log("createChar:", "client has no charId :(((", client.socketId);
+			return;
+		}
+		const char = games[client.gameId].getChar(client.charId);
+
+		redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'dropitem', 'data': item }));
+		log("dropItem:", "item dropped:", client.charId, item);
+	}
+
+	// trade items
+	function tradeRequest(client: GameClient, receiver: GameClient, item: Item){
+
+		redisPub.publish('game:' + client.gameId, JSON.stringify({ 'traderequest': 'collectitem', 'data': { item, receiver } }));
+		log("collectItem:", "item collected:", client.charId, item);
+	}
+
+	function tradeAccept(client: GameClient, item: Item){
+
 	}
 
 })();
