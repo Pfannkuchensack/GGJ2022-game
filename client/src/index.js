@@ -23,7 +23,7 @@ window.addEventListener('load', ()=>{
 	document.getElementById('test').addEventListener('click', ()=>{
 		// alex hier spass haben darf
 		console.log('i clicked UwU');
-		socket.emit('game', { gameid: 'test', charid: 'test1'});
+		socket.emit('game', { gameid: 'test', charid: 'test1', action: 'test' });
 	});
 
 	new Game({
