@@ -77,19 +77,23 @@ export class Game {
 
 		// not your turn!
 		if (indexOf !== this._currentPosition) {
+			console.log('not your turn!');
 			return false
 		}
 
 		if (!this._map.isPositionFree(nextPos)) {
+			console.log('position not free!');
 			return false
 		}
 
 		const neededMovepoints = this._map.neededMovepoints(nextPos)
 		if (neededMovepoints === 0) {
+			console.log('not possible to move!');
 			return false
 		}
 
 		if (char.currentMovePoints < neededMovepoints) {
+			console.log('not enough movepoints!');
 			return false
 		}
 

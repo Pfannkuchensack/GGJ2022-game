@@ -35,10 +35,21 @@ export class GameMap {
 		this._chars.push(char)
 	}
 
+	getCharAt(q: number, r: number): Character | undefined {
+		for (let index = 0; index < this._chars.length; index++) {
+			if (this._chars[index].equalPosition({q:q, r:r})) {
+				return this._chars[index]
+			}
+		}
+
+		return undefined;
+	}
+
 	updateChar(char: Character) {
 		const indexOf = this._chars.indexOf(char);
 		if (indexOf !== -1) {
 			this._chars[indexOf] = char;
+			console.log(this._chars);
 		}
 	}
 
