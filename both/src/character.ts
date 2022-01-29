@@ -73,6 +73,34 @@ export class Character {
         this._id = id;
     }
 
+    get export(): any {
+        return {
+            level: this.level,
+            xp: this.xp,
+            hp: this.hp,
+            currentMovePoints: this._currentMovePoints,
+            baseMovePoints: this._baseMovePoints,
+            attackNames: this._attackNames,
+            itemNames: this._itemNames,
+            q: this._q,
+            r: this._r,
+            id: this._id
+        }
+    }
+
+    import(data: any) {
+        this._level = data.level;
+        this._xp = data.xp;
+        this._hp = data.hp;
+        this._currentMovePoints = data.currentMovePoints;
+        this._baseMovePoints = data.baseMovePoints;
+        this._attackNames = data.attackNames;
+        this._itemNames = data.itemNames;
+        this._q = data.q;
+        this._r = data.r;
+        this._id = data.id;
+    }
+
     get id() {
         return this._id;
     }

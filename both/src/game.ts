@@ -118,6 +118,9 @@ export class Game {
 		// get ground informations
 		const challengerTile = this._map.getTile(challenger.position)
 		const challengedTile = this._map.getTile(challenged.position)
+		if (challengerTile === undefined || challengedTile === undefined) {
+			return null;
+		}
 
 		return challenger.attackChar(challengerAttackName, challengerTile, challenged, challengedTile, false, config)
 	}

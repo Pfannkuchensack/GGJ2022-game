@@ -1,13 +1,24 @@
 // cube coordinates
 
 import { Character } from "./character";
-import { Tile } from "./tile";
+import { Tile, TileStore } from "./tile";
 
 export class GameMap {
 	_chars: Character[];
+	_tiles: TileStore;
 
 	constructor() {
 		this._chars = [] as Character[];
+		this._tiles = [];
+
+		const size = 8;
+
+		for (let x = 0; x <= size; x++) {
+			this._tiles[x] = [];
+			for (let y = 0; y <= size; y++) {
+				this._tiles[x][y] = new Tile("grass", 1, 0, x, y);
+			}
+		}
 	}
 
 	isPositionFree(pos: { q: number, r: number }): boolean {
@@ -26,9 +37,15 @@ export class GameMap {
 		return 1;
 	}
 
-	getTile(pos: { q: number, r: number }): Tile {
-		// todo: search tile
-		return new Tile("plane", 1, 0)
+	getTile(pos: { q: number, r: number }): Tile | undefined {
+		if (pos.q < 0 || pos.q >= this._tiles.length || pos.r < 0 || pos.r >= this._tiles[pos.q].length) {
+			return undefined
+		}
+		return this._tiles[pos.q][pos.r];
+	}
+
+	get tileStore(): TileStore {
+		return this._tiles;
 	}
 
 	addChar(char: Character) {
@@ -43,6 +60,10 @@ export class GameMap {
 		}
 
 		return undefined;
+	}
+
+	get chars(): Character[] {
+		return this._chars
 	}
 
 	updateChar(char: Character) {

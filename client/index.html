@@ -10,16 +10,22 @@
                 Header gamestuff status bar
             </header>
             <main>
-                <canvas id="canvas" width="480" height="270"></canvas>
+                <canvas id="canvas" width="800" height="600"></canvas>
             </main>
             <footer>
                 <h2>Actions:</h2>
                 <a id="createChar">Create Char</a>
                 <a id="move">Move</a>
                 <a id="finishturn">Finish</a>
-                <input id="q" type="number" value="10">
-                <input id="r" type="number" value="10">        
+                <input id="q" type="number" value="5">
+                <input id="r" type="number" value="5">        
             </footer>
+        </div>
+
+        <div style="display:none;">
+          <img id="tile_ground" src="assets/tile_ground.png" width="80" height="140" alt="tile_ground">
+          <img id="jet_blue" src="assets/jet_blue.png" width="80" height="80" alt="Jet">
+		  <img id="hover" src="assets/test80Hover.png" width="80" height="80" alt="Hover">
         </div>
 
         <script src="app.js"></script>
