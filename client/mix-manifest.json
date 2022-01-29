@@ -2,7 +2,10 @@
     "/dist/app.js": "/dist/app.js",
     "/dist/css/main.css": "/dist/css/main.css",
     "/dist/index.html": "/dist/index.html",
+    "/dist/assets/ambience_music.mp3": "/dist/assets/ambience_music.mp3",
     "/dist/assets/attack.mp3": "/dist/assets/attack.mp3",
+    "/dist/assets/cursor_action.png": "/dist/assets/cursor_action.png",
+    "/dist/assets/cursor_hover.png": "/dist/assets/cursor_hover.png",
     "/dist/assets/jet_blue.png": "/dist/assets/jet_blue.png",
     "/dist/assets/jet_blue_E.png": "/dist/assets/jet_blue_E.png",
     "/dist/assets/jet_blue_E_40.png": "/dist/assets/jet_blue_E_40.png",
@@ -26,7 +29,6 @@
     "/dist/assets/jet_red_W.png": "/dist/assets/jet_red_W.png",
     "/dist/assets/level_up.mp3": "/dist/assets/level_up.mp3",
     "/dist/assets/pick_up.mp3": "/dist/assets/pick_up.mp3",
-    "/dist/assets/test80Hover.png": "/dist/assets/test80Hover.png",
     "/dist/assets/tile.png": "/dist/assets/tile.png",
     "/dist/assets/tile_ground.png": "/dist/assets/tile_ground.png"
 }

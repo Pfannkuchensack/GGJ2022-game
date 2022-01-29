@@ -208,8 +208,9 @@ log('hi!');
 		client.charId = char.id
 
 		// broadcast
-		redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'addChar', 'data': char.export }));
-		log("createChar:", "char created.", client.charId, char);
+		sendState(client, true);
+		/*redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'addChar', 'data': char.export }));
+		log("createChar:", "char created.", client.charId, char);*/
 	}
 
 	// Move char
@@ -242,13 +243,12 @@ log('hi!');
 		const game = games[client.gameId];
 		const char = game.getChar(client.charId);
 		if (char !== undefined) {
-			// move
 			const success = game.finishTurn(char);
 			if (!success) {
 				log("moveChar:", "turn dont finished.", client.charId);
 				return;
 			}
-
+			char.reset();
 			sendState(client, true);
 		}
 	}

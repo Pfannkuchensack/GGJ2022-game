@@ -54,6 +54,11 @@ export class Renderer {
 				this._ctx.drawImage(this._tile_ground, iso.x, iso.y - offsetY);
 			})
 		});
+		
+		if (this._hover_tile) {
+			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
+			this._ctx.drawImage(this._cursor_hover, screen.x, screen.y - offsetY);
+		}
 
 		this._map.chars.forEach((char) => {
 			const iso = this.mapToScreen(char.position.q, char.position.r);
@@ -61,10 +66,7 @@ export class Renderer {
 			this._ctx.drawImage(this._jet_blue, iso.x, iso.y - offsetY);
 		})
 
-		if (this._hover_tile) {
-			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
-			this._ctx.drawImage(this._cursor_hover, screen.x, screen.y - offsetY);
-		}
+		
 	}
 
 	hoverScreen(screenX: number, screenY: number) {

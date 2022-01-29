@@ -8,8 +8,8 @@ window.addEventListener('load', () => {
 
 	let canvas = document.getElementById('canvas') as
 		HTMLCanvasElement;
-    let context = canvas.getContext('2d');
-    if (context !== null) {
+	let context = canvas.getContext('2d');
+	if (context !== null) {
 		startApp(canvas, context);
 	}
 });
@@ -18,21 +18,21 @@ class App {
 	_map: GameMap;
 	_socket: Socket;
 	_canvas: HTMLCanvasElement;
-    _context: CanvasRenderingContext2D;
-    _renderer: Renderer
+	_context: CanvasRenderingContext2D;
+	_renderer: Renderer
 
 	constructor(gameMap: GameMap, socket: Socket, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		this._map = gameMap;
 		this._socket = socket;
 		this._canvas = canvas;
-        this._context = context;
-        this._renderer = new Renderer(this._map, this._canvas, this._context);
+		this._context = context;
+		this._renderer = new Renderer(this._map, this._canvas, this._context);
 	}
 
-    startLoop() {
-        this._renderer.draw()
-        window.requestAnimationFrame(this.startLoop.bind(this));
-    }
+	startLoop() {
+		this._renderer.draw()
+		window.requestAnimationFrame(this.startLoop.bind(this));
+	}
 
 	join(gameid: string) {
 		this._socket.emit('join', { gameid: gameid });
@@ -68,11 +68,11 @@ class App {
 
 	click(x: number, y: number) {
 		const pos = this._renderer.screenToMap(x, y);
-		console.log(pos);
- 	}
+		this.move(pos.q, pos.r);
+	}
 
 	hover(x: number, y: number) {
-		this._renderer.hoverScreen(x,y)
+		this._renderer.hoverScreen(x, y)
 	}
 
 	reciveState(event: any) {
@@ -82,6 +82,13 @@ class App {
 
 		switch (event.actiontype) {
 			case 'state':
+				if (event.data.currentPlayer == this._socket.id) {
+					(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du bist dran';
+				}
+				else {
+					(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du musst warten';
+				}
+				let insertedids = [] as string[];
 				event.data.chars.forEach((charData: any) => {
 					let char = this._map.getCharById(charData.id)
 
@@ -90,19 +97,20 @@ class App {
 						this._map.addChar(char);
 					}
 
-					char.import(charData)
+					char.import(charData);
+					insertedids.push(char.id);
 
 					if (char.id === this._socket.id) {
-						this._map._playerChar = newChar;
-						(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du bist dran';
+						this._map._playerChar = char;
 					}
-					else
-					{
-						(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du musst warten';
+				});
+				this._map.chars.forEach((char: Character) => {
+					if (insertedids.indexOf(char.id) === -1) {
+						this._map.removeChar(char);
 					}
-					
-				})
+				});
 				break;
+			/*
 			case 'addChar':
 				const newChar = new Character("", 0, 0, 0, 0)
 				newChar.import(event.data)
@@ -113,6 +121,7 @@ class App {
 
 				this._map.addChar(newChar);
 				break;
+				*/
 			case 'move':
 				const oldChar = this._map.getCharById(event.data.id)
 				if (oldChar !== undefined) {
@@ -149,24 +158,24 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 		app.hover(event.offsetX, event.offsetY);
 	})
 
-    const createCharBtn = document.getElementById('createChar') as HTMLCanvasElement;
-    createCharBtn.addEventListener('click', ()=>{
-        app.createChar('TestDerErste', 'hallo', 'attack1');
+	const createCharBtn = document.getElementById('createChar') as HTMLCanvasElement;
+	createCharBtn.addEventListener('click', () => {
+		app.createChar('TestDerErste', 'hallo', 'attack1');
 	});
 
-    const moveBtn = document.getElementById('move') as HTMLCanvasElement;
-	moveBtn.addEventListener('click', ()=>{
-        const q = document.getElementById('q') as HTMLInputElement;
-        const r = document.getElementById('r') as HTMLInputElement;
-        if (q !== null && r !== null) {
-            app.move(parseInt(q.value), parseInt(r.value));
-        }
-	});
-	
-    const finishturn = document.getElementById('finishturn') as HTMLCanvasElement;
-	finishturn.addEventListener('click', ()=>{
-        app.finishturn();
+	const moveBtn = document.getElementById('move') as HTMLCanvasElement;
+	moveBtn.addEventListener('click', () => {
+		const q = document.getElementById('q') as HTMLInputElement;
+		const r = document.getElementById('r') as HTMLInputElement;
+		if (q !== null && r !== null) {
+			app.move(parseInt(q.value), parseInt(r.value));
+		}
 	});
 
-    app.startLoop();
+	const finishturn = document.getElementById('finishturn') as HTMLCanvasElement;
+	finishturn.addEventListener('click', () => {
+		app.finishturn();
+	});
+
+	app.startLoop();
 }
