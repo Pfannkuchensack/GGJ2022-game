@@ -6,10 +6,12 @@ import { Tile, TileStore } from "./tile";
 export class GameMap {
 	_chars: Character[];
 	_tiles: TileStore;
+	_playerChar: Character | undefined
 
 	constructor() {
 		this._chars = [] as Character[];
 		this._tiles = [];
+		this._playerChar = undefined;
 
 		const size = 8;
 
@@ -66,12 +68,13 @@ export class GameMap {
 		return this._chars
 	}
 
-	updateChar(char: Character) {
-		const indexOf = this._chars.indexOf(char);
-		if (indexOf !== -1) {
-			this._chars[indexOf] = char;
-			console.log(this._chars);
+	getCharById(charId: string): Character | undefined {
+		for (let index = 0; index < this._chars.length; index++) {
+			if (this._chars[index].id === charId) {
+				return this._chars[index]
+			}
 		}
+		return undefined
 	}
 
 	removeChar(char: Character) {

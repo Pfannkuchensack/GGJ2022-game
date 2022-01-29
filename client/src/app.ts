@@ -80,19 +80,47 @@ class App {
 			return;
 		}
 
-		const char = new Character("", 0, 0, 0, 0)
-		char.import(event.data)
-
 		switch (event.actiontype) {
+			case 'state':
+				event.data.chars.forEach((charData: any) => {
+					let char = this._map.getCharById(charData.id)
+
+					if (char === undefined) {
+						char = new Character("", 0, 0, 0, 0)
+						this._map.addChar(char);
+					}
+
+					char.import(charData)
+
+					if (char.id === this._socket.id) {
+						this._map._playerChar = newChar;
+						(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du bist dran';
+					}
+					else
+					{
+						(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du musst warten';
+					}
+					
+				})
+				break;
 			case 'addChar':
-				this._map.addChar(char);
-				console.log(this._map._chars)
+				const newChar = new Character("", 0, 0, 0, 0)
+				newChar.import(event.data)
+
+				if (newChar.id === this._socket.id) {
+					this._map._playerChar = newChar
+				}	
+
+				this._map.addChar(newChar);
 				break;
 			case 'move':
-				this._map.updateChar(char);
+				const oldChar = this._map.getCharById(event.data.id)
+				if (oldChar !== undefined) {
+					oldChar.import(event.data)
+				}
 				break;
 			default:
-				console.log("?!?!?!?!ß111elf", event.actiontype, char);
+				console.log("?!?!?!?!ß111elf", event.actiontype, event.data);
 		}
 	}
 }

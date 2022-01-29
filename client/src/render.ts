@@ -50,7 +50,7 @@ export class Renderer {
 
 				this._ctx.drawImage(this._tile_ground, iso.x, iso.y-offsetY);
 			})
-		})
+		});
 
 		this._map.chars.forEach((char) => {
 			const iso = this.mapToScreen(char.position.q, char.position.r);
@@ -89,6 +89,6 @@ export class Renderer {
 		const mapX = (screenX / this._tileWidthHalf + screenY / this._tileHeightHalf) / 2;
 		const mapY = (screenY / this._tileHeightHalf - (screenX / this._tileWidthHalf)) / 2;
 
-		return { q: Math.floor(mapX), r: Math.round(mapY) }
+		return { q: Math.floor(mapX), r: Math.round(mapY) };
 	}
 }

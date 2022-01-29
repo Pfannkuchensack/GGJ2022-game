@@ -98,15 +98,15 @@ log('hi!');
 			});
 
 			//
-			/*
-			redisSub.subscribe('game:'+client.gameId+':'+client.charId, (message, channelname) => {
+			redisSub.subscribe('game:' + client.gameId + ':' + client.socketId, (message, channelname) => {
 				socket.emit('game', message);
 			});
-			*/
 
 			// add Client to CLient Array
 			clients[socket.id] = client
 			log('Neuer Client', client.socketId);
+
+			sendState(client, false)
 		});
 
 		socket.on('game', function (action) {
@@ -136,7 +136,25 @@ log('hi!');
 		});
 
 		socket.on('disconnect', reason => {
+			if (!clients.hasOwnProperty(socket.id)) {
+				return
+			}
+
+			const client = clients[socket.id];
+			const game = games[client.gameId];
+			const char = game.getChar(socket.id)
+			if (char !== undefined) {
+				log("socketIO[disconnect]", "delete char", char.id)
+				game.removeChar(char);
+			}
+
+			if (game.chars.length == 0) {
+				log("socketIO[disconnect]", "delete game", client.gameId)
+				delete games[client.gameId];
+			}
+
 			delete clients[socket.id];
+			log("socketIO[disconnect]", "delete client", socket.id)
 			//redisClient.removeListener('message', NewMsg);
 			// @TODO: Prüfen ob noch jemand anders in der Lobby ist fehlt hier noch
 			//redisClient.unsubscribe('gamey:' + socket.lobby);
@@ -146,6 +164,30 @@ log('hi!');
 	// start all
 	server.listen(PORT)
 	log('http server started!');
+	// Send State
+	function sendState(client: GameClient, sendToAll: boolean) {
+		const game = games[client.gameId];
+
+		const chars = game.chars.map((char: Character) => {
+			return char.export
+		})
+
+		// broadcast
+		let topic = 'game:' + client.gameId
+		if (!sendToAll) {
+			topic += ':' + client.socketId
+		}
+
+		redisPub.publish(topic, JSON.stringify({
+			actiontype: 'state',
+			data: {
+				chars: chars,
+				currentPlayer: game.currentChar?.id
+			}
+		}));
+		log("sendState:", "send state to: ", topic, chars);
+	}
+
 	// Create a Character
 	function createChar(action: { name: string, resistance: string, attack: string }, client: GameClient) {
 		// spieler hat schon einen char!!!!!!!!!!!!
@@ -191,7 +233,7 @@ log('hi!');
 		}
 	}
 
-    // finish turn
+	// finish turn
 	function finishTurn(action: {}, client: GameClient) {
 		if (client.charId === undefined) {
 			log("createChar:", "client has no charId :(((", client.socketId);
@@ -206,13 +248,12 @@ log('hi!');
 				log("moveChar:", "turn dont finished.", client.charId);
 				return;
 			}
-			// broadcast
-			redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'finishturn', 'data': char.export }));
-			log("moveChar:", "finish turn.", client.charId, char);
+
+			sendState(client, true);
 		}
 	}
 
-	function collectItem(client: GameClient, item: Item){
+	function collectItem(client: GameClient, item: Item) {
 		if (client.charId === undefined) {
 			log("createChar:", "client has no charId :(((", client.socketId);
 			return;
@@ -223,7 +264,7 @@ log('hi!');
 		log("collectItem:", "item collected:", client.charId, item);
 	}
 
-	function dropItem(client: GameClient, item: Item){
+	function dropItem(client: GameClient, item: Item) {
 		if (client.charId === undefined) {
 			log("createChar:", "client has no charId :(((", client.socketId);
 			return;
@@ -235,13 +276,13 @@ log('hi!');
 	}
 
 	// trade items
-	function tradeRequest(client: GameClient, receiver: GameClient, item: Item){
+	function tradeRequest(client: GameClient, receiver: GameClient, item: Item) {
 
 		redisPub.publish('game:' + client.gameId, JSON.stringify({ 'traderequest': 'collectitem', 'data': { item, receiver } }));
 		log("collectItem:", "item collected:", client.charId, item);
 	}
 
-	function tradeAccept(client: GameClient, item: Item){
+	function tradeAccept(client: GameClient, item: Item) {
 
 	}
 

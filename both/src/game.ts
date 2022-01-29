@@ -14,7 +14,7 @@ export class Game {
 		this._gameId = gameId;
 	}
 
-	get currentChar(): Character {
+	get currentChar(): Character | undefined {
 		return this._chars[this._currentPosition]
 	}
 
@@ -28,7 +28,7 @@ export class Game {
 			return true;
 		}
 
-		if (this.currentChar.id !== char.id) {
+		if (this.currentChar === undefined || this.currentChar.id !== char.id) {
 			return false
 		}
 
@@ -49,13 +49,17 @@ export class Game {
 	}
 
 	getChar(charId: string): Character | undefined {
-		for(let index = 0; index < charId.length; index++) {
+		for(let index = 0; index < this._chars.length; index++) {
 			if (this._chars[index].id === charId) {
 				return this._chars[index]			
 			}
 		}
 
 		return undefined
+	}
+
+	get chars(): Character[] {
+		return this._chars
 	}
 
 	removeChar(char: Character) {
@@ -97,7 +101,10 @@ export class Game {
 			return false
 		}
 
-		// todo: is field neighboring?
+		if ((nextPos.q-1 === char.position.q || nextPos.q+1 === char.position.q) && (nextPos.r-1 === char.position.r || nextPos.r+1 === char.position.r)) {
+			console.log('field not neighboring!');
+			return false;
+		}
 
 		char.currentMovePoints = char.currentMovePoints - neededMovepoints;
 		char.setPosition(nextPos.q, nextPos.r);
