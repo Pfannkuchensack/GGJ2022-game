@@ -13,7 +13,8 @@ export class Renderer {
 	_cameraY: number;
 	_tile_ground: HTMLImageElement;
 	_jet_blue: HTMLImageElement;
-    _hover: HTMLImageElement;
+	_cursor_hover: HTMLImageElement;
+	_cursor_action: HTMLImageElement;
 	_hover_tile: Tile | null;
 
 	constructor(gameMap: GameMap, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
@@ -34,40 +35,42 @@ export class Renderer {
 		this._tile_ground = tile_ground;
 		const jet_blue = document.getElementById('jet_blue') as HTMLImageElement
 		this._jet_blue = jet_blue;
-		const hover = document.getElementById('hover') as HTMLImageElement
-		this._hover = hover;
+		const cursor_hover = document.getElementById('cursor_hover') as HTMLImageElement
+		this._cursor_hover = cursor_hover;
+		const cursor_action = document.getElementById('cursor_action') as HTMLImageElement
+		this._cursor_action = cursor_action;
 	}
 
 	draw() {
-        const offsetY = 5
+		const offsetY = 5
 
 		this._ctx.fillStyle = "rgb(16, 17, 18)";
 		this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
 
-        this._map.tileStore.forEach((tiles, x) => {
+		this._map.tileStore.forEach((tiles, x) => {
 			tiles.forEach((tile, y) => {
 				const iso = this.mapToScreen(x, y)
 
-				this._ctx.drawImage(this._tile_ground, iso.x, iso.y-offsetY);
+				this._ctx.drawImage(this._tile_ground, iso.x, iso.y - offsetY);
 			})
 		});
 
 		this._map.chars.forEach((char) => {
 			const iso = this.mapToScreen(char.position.q, char.position.r);
 
-			this._ctx.drawImage(this._jet_blue, iso.x, iso.y-offsetY);
+			this._ctx.drawImage(this._jet_blue, iso.x, iso.y - offsetY);
 		})
 
 		if (this._hover_tile) {
 			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
-			this._ctx.drawImage(this._hover, screen.x, screen.y-offsetY);
+			this._ctx.drawImage(this._cursor_hover, screen.x, screen.y - offsetY);
 		}
 	}
 
 	hoverScreen(screenX: number, screenY: number) {
 		const iso = this.screenToMap(screenX, screenY);
 
-		const tile = this._map.getTile({q: Math.round(iso.q), r: Math.round(iso.r)});
+		const tile = this._map.getTile({ q: Math.round(iso.q), r: Math.round(iso.r) });
 		if (tile !== undefined) {
 			this._hover_tile = tile;
 		} else {
