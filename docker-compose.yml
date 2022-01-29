@@ -1,0 +1,29 @@
+version: '3'
+services:
+  server:
+    image: node:alpine
+    restart: always
+    ports:
+      - "8010:8010"
+    volumes:
+      - ./server/:/home/node/app/
+    working_dir: /home/node/app/
+    environment:
+      - NODE_ENV=production
+    command: sh -c 'npm i && nodejs server.js'
+    links:
+      - redis
+    depends_on:
+      - redis
+    env_file:
+      - ./server/.env
+  redis:
+    image: redis:alpine
+    expose:
+      - 6379
+    restart: always
+    volumes:
+      - ./redis_data/:/var/lib/redis/
+      - ./redis_conf/:/usr/local/etc/redis/
+    environment:
+      - REDIS_REPLICATION_MODE=master

@@ -20,7 +20,7 @@ var log = function () { return console.log.apply(console, ['[' + new Date().toIS
 const redis = require('redis');
 const io = require('socket.io')(server);
 const { argv } = require('process');
-server.listen(8040);
+server.listen(8010);
 log('Starte Websocket Server');
 
 process.on('uncaughtException', function (e) {
@@ -51,29 +51,36 @@ const RetryStrategy = function (options) {
 	// reconnect after
 	return Math.min(options.attempt * 100, 3000);
 }
-const redisClient = redis.createClient({ host: process.env.REDIS_HOST, port: 6379, retry_strategy: RetryStrategy, lazyConnect: true, retry_unfulfilled_commands: true });
-const redispub = redis.createClient({ host: process.env.REDIS_HOST, port: 6379, retry_strategy: RetryStrategy, lazyConnect: true, retry_unfulfilled_commands: true });
+const redisClient = redis.createClient({ host: '127.0.0.1', port: 6379, retry_strategy: RetryStrategy, lazyConnect: true, retry_unfulfilled_commands: true });
+const redispub = redis.createClient({ host: '127.0.0.1', port: 6379, retry_strategy: RetryStrategy, lazyConnect: true, retry_unfulfilled_commands: true });
 //redisClient.auth(process.env.REDIS_PASSWORD); // Nicht nötig local
+redisClient.connect();
+redispub.connect();
 
 
 
 
 io.on('connection', function (socket) {
 	// var hostname = socket.handshake.headers.host.toLowerCase();
-	socket.once('connect', function (data) {
-		redisClient.subscribe('game:' + data.gameid);
-		redisClient.addListener('message', NewMsg);
-		clients[socket.id] = { socket: socket.id, lobby: data.gameid, color: data.color };
+	socket.on('go', function (data) {
+		redisClient.subscribe('game:' + data.gameid, (message, channelName) => {
+			//console.info(message, channelName);
+			redispub.publish('game:' + clients[socket.id].lobby, JSON.stringify(message));
+		});
+		//redisClient.addListener('message', NewMsg);
+		
+		clients[socket.id] = { socket: socket.id, lobby: data.gameid, charId: data.charid };
+		log('Neuer Client', socket.id, data);
 	});
 
 	socket.on('game', function (message) {
-		//console.log('game:' + clients[socket.id].lobby, JSON.stringify(message));
-		redispub.publish('game:' + clients[socket.id].lobby, JSON.stringify(message));
+		console.log('game:' + clients[socket.id].lobby, JSON.stringify(message));
+		
 	});
 
-	socket.once('disconnect', reason => {
+	socket.on('disconnect', reason => {
 		delete clients[socket.id];
-		redisClient.removeListener('message', NewMsg);
+		//redisClient.removeListener('message', NewMsg);
 		// @TODO: Prüfen ob noch jemand anders in der Lobby ist fehlt hier noch
 		//redisClient.unsubscribe('gamey:' + socket.lobby);
 	});
@@ -82,7 +89,7 @@ io.on('connection', function (socket) {
 		if (channel == 'game:' + clients[socket.id].lobby) {
 			try {
 				const obj = JSON.parse(message);
-				if (obj.C !== clients[socket.id].color) {
+				if (obj.charId !== clients[socket.id].charid) {
 					socket.emit('game', message);
 					//log(message);
 				}
