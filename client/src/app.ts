@@ -65,6 +65,15 @@ class App {
 		})
 	}
 
+	click(x: number, y: number) {
+		const pos = this._renderer.screenToMap(x, y);
+		console.log(pos);
+ 	}
+
+	hover(x: number, y: number) {
+		this._renderer.hoverScreen(x,y)
+	}
+
 	reciveState(event: any) {
 		if (!event.hasOwnProperty('actiontype')) {
 			return;
@@ -97,6 +106,14 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 		console.log("socketIO[game]:", data);
 		app.reciveState(data);
 	});
+
+	canvas.addEventListener('click', (event) => {
+		app.click(event.offsetX, event.offsetY);
+	})
+
+	canvas.addEventListener('mousemove', (event) => {
+		app.hover(event.offsetX, event.offsetY);
+	})
 
     const createCharBtn = document.getElementById('createChar') as HTMLCanvasElement;
     createCharBtn.addEventListener('click', ()=>{
