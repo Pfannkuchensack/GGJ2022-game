@@ -35,7 +35,8 @@ export class Character {
     _level: number;
     _xp: number;
     _hp: number;
-    _movePoints: number;
+    _currentMovePoints: number;
+    _baseMovePoints: number;
     _baseResistance: {
         blade: number,
         impact: number,
@@ -49,12 +50,14 @@ export class Character {
     // position
     _q: number;
     _r: number;
+    _id: string;
 
-    constructor(level: number, xp: number, hp: number, movePoints: number) {
+    constructor(id: string, level: number, xp: number, hp: number, movePoints: number) {
         this._level = level;
         this._xp = xp;
         this._hp = hp;
-        this._movePoints = movePoints;
+        this._currentMovePoints = movePoints;
+        this._baseMovePoints = movePoints;
         this._baseResistance = {
             blade: 0,
             impact: 0,
@@ -67,6 +70,11 @@ export class Character {
         this._itemNames = [];
         this._q = 0;
         this._r = 0;
+        this._id = id;
+    }
+
+    get id() {
+        return this._id;
     }
 
     get xp() {
@@ -82,13 +90,25 @@ export class Character {
         return this._hp;
     }
 
-    get movePoints() {
-        // todo: add items bonus
-        return this._movePoints;
+    get currentMovePoints() {
+        return this._currentMovePoints;
     }
 
-    set movePoints(movePoints: number) {
-        this._movePoints = movePoints;
+    get maxMovePoints() {
+        // todo: add items bonus
+        return this._baseMovePoints
+    }
+
+    set currentMovePoints(movePoints: number) {
+        this._currentMovePoints = movePoints;
+    }
+
+    set baseMovePoints(movePoints: number) {
+        this._baseMovePoints = movePoints;
+    }
+
+    reset() {
+        this._currentMovePoints = this.maxMovePoints
     }
 
     get position(): { q: number, r: number } {
@@ -149,6 +169,15 @@ export class Character {
         }
 
         return this.attacks[0]
+    }
+
+    addAttack(attackName: string, config: { attacks: AttacksConfig }) {
+        if (!config.attacks.hasOwnProperty(attackName)) {
+            return
+        }
+
+        // todo: unique attacks
+        this.attacks.push(attackName)
     }
 
     attackChar(attackName: string, tile: Tile, otherChar: Character, otherCharTile: Tile, dryRun: boolean, config: { attacks: AttacksConfig }): BattleLog {

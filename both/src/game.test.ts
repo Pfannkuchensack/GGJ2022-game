@@ -7,16 +7,16 @@ import { GameMap } from './map';
 describe('game', () => {
 	it('can create', () => {
 		const map = new GameMap()
-		const game = new Game(map)
+		const game = new Game('gameId', map)
 		assert.notEqual(game, null)
 	})
 
 	describe('char managment', () => {
 		it('add char', () => {
 			const map = new GameMap()
-			const game = new Game(map)
+			const game = new Game('gameId', map)
 
-			const char = new Character(1, 1, 100, 10)
+			const char = new Character('charId', 1, 1, 100, 10)
 			game.addChar(char)
 
 			assert.equal(game._chars.length, 1)
@@ -24,13 +24,13 @@ describe('game', () => {
 
 		it('add more chars', () => {
 			const map = new GameMap()
-			const game = new Game(map)
+			const game = new Game('gameId', map)
 
-			const char1 = new Character(1, 1, 100, 10)
+			const char1 = new Character('char1', 1, 1, 100, 10)
 			game.addChar(char1)
-			const char2 = new Character(1, 1, 100, 10)
+			const char2 = new Character('char2', 1, 1, 100, 10)
 			game.addChar(char2)
-			const char3 = new Character(1, 1, 100, 10)
+			const char3 = new Character('char3', 1, 1, 100, 10)
 			game.addChar(char3)
 
 			assert.equal(game._chars.length, 3)
@@ -41,13 +41,13 @@ describe('game', () => {
 
 		it('remove char', () => {
 			const map = new GameMap()
-			const game = new Game(map)
+			const game = new Game('gameId', map)
 
-			const char1 = new Character(1, 1, 100, 10)
+			const char1 = new Character('char1', 1, 1, 100, 10)
 			game.addChar(char1)
-			const char2 = new Character(1, 1, 100, 10)
+			const char2 = new Character('char2', 1, 1, 100, 10)
 			game.addChar(char2)
-			const char3 = new Character(1, 1, 100, 10)
+			const char3 = new Character('char3', 1, 1, 100, 10)
 			game.addChar(char3)
 
 			game._currentPosition = 2
@@ -63,12 +63,12 @@ describe('game', () => {
 	describe('moveing', () => {
 		it('not your turn', () => {
 			const map = new GameMap()
-			const game = new Game(map)
+			const game = new Game('gameId', map)
 
-			const char1 = new Character(1, 1, 100, 10)
+			const char1 = new Character('char1', 1, 1, 100, 10)
 			game.addChar(char1)
 			char1.setPosition(1, 1)
-			const char2 = new Character(1, 1, 100, 10)
+			const char2 = new Character('char2', 1, 1, 100, 10)
 			game.addChar(char2)
 
 			game._currentPosition = 0;
@@ -80,12 +80,12 @@ describe('game', () => {
 
 		it('your turn', () => {
 			const map = new GameMap()
-			const game = new Game(map)
+			const game = new Game('gameId', map)
 
-			const char1 = new Character(1, 1, 100, 10)
+			const char1 = new Character('char1', 1, 1, 100, 10)
 			game.addChar(char1)
 			char1.setPosition(1, 1)
-			const char2 = new Character(1, 1, 100, 10)
+			const char2 = new Character('char2', 1, 1, 100, 10)
 			game.addChar(char2)
 
 			game._currentPosition = 0;
@@ -112,13 +112,13 @@ describe('game', () => {
 
 		it('not your turn', () => {
 			const map = new GameMap()
-			const game = new Game(map)
+			const game = new Game('gameId', map)
 
-			const char1 = new Character(1, 1, 100, 10)
+			const char1 = new Character('char1', 1, 1, 100, 10)
 			game.addChar(char1)
 			char1.setPosition(1, 1)
 			char1._attackNames.push("attack1")
-			const char2 = new Character(1, 1, 100, 10)
+			const char2 = new Character('char2', 1, 1, 100, 10)
 			game.addChar(char2)
 			char2._attackNames.push("attack2")
 
@@ -131,13 +131,13 @@ describe('game', () => {
 
 		it('your turn', () => {
 			const map = new GameMap()
-			const game = new Game(map)
+			const game = new Game('gameId', map)
 
-			const char1 = new Character(1, 1, 100, 10)
+			const char1 = new Character('char1', 1, 1, 100, 10)
 			game.addChar(char1)
 			char1.setPosition(1, 1)
 			char1._attackNames.push("attack1")
-			const char2 = new Character(1, 1, 100, 10)
+			const char2 = new Character('char2', 1, 1, 100, 10)
 			game.addChar(char2)
 			char2._attackNames.push("attack2")
 
@@ -153,22 +153,20 @@ describe('game', () => {
 
 	it('finish turn', () => {
 		const map = new GameMap()
-		const game = new Game(map)
+		const game = new Game('gameId', map)
 
-		const char1 = new Character(1, 1, 100, 10)
+		const char1 = new Character('char1', 1, 1, 100, 10)
 		game.addChar(char1)
-		const char2 = new Character(1, 1, 100, 10)
+		const char2 = new Character('char2', 1, 1, 100, 10)
 		game.addChar(char2)
-		const char3 = new Character(1, 1, 100, 10)
+		const char3 = new Character('char3', 1, 1, 100, 10)
 		game.addChar(char3)
 
-		game.finishTurn()
+		game.finishTurn(char1)
 		assert.equal(game._currentPosition, 1)
-		game.finishTurn()
+		game.finishTurn(char2)
 		assert.equal(game._currentPosition, 2)
-		game.finishTurn()
-		assert.equal(game._currentPosition, -1)
-		game.finishTurn()
+		game.finishTurn(char3)
 		assert.equal(game._currentPosition, 0)
 	})
 })

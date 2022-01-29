@@ -5,31 +5,31 @@ import { Tile } from './tile';
 
 describe('character', () => {
 	it('can create', () => {
-		const char = new Character(10, 10, 10, 10);
+		const char = new Character('charId', 10, 10, 10, 10);
 		assert.equal(char._level, 10)
 		assert.equal(char._xp, 10)
 		assert.equal(char._hp, 10)
-		assert.equal(char._movePoints, 10)
+		assert.equal(char._baseMovePoints, 10)
 	})
 
 	it('getter', () => {
-		const char = new Character(10, 10, 10, 10);
+		const char = new Character('charId', 10, 10, 10, 10);
 		assert.equal(char.level, 10)
 		assert.equal(char.xp, 10)
 		assert.equal(char.hp, 10)
-		assert.equal(char.movePoints, 10)
+		assert.equal(char._baseMovePoints, 10)
 	})
 
 	describe('position', () => {
 		it('set position', () => {
-			const char = new Character(10, 10, 10, 10);
+			const char = new Character('charId', 10, 10, 10, 10);
 			char.setPosition(10, 5)
 			assert.equal(char._q, 10)
 			assert.equal(char._r, 5)
 			assert.deepEqual(char.position, { q: 10, r: 5 })
 		})
 		it('equal position', () => {
-			const char = new Character(10, 10, 10, 10);
+			const char = new Character('charId', 10, 10, 10, 10);
 			assert.equal(char.equalPosition({ q: 0, r: 0 }), true)
 			char.setPosition(10, 5)
 			assert.equal(char.equalPosition({ q: 10, r: 5 }), true)
@@ -38,7 +38,7 @@ describe('character', () => {
 
 	describe('items', () => {
 		it('add a item', () => {
-			const char = new Character(10, 10, 10, 10);
+			const char = new Character('charId', 10, 10, 10, 10);
 			const success = char.addItem("item1")
 			assert.equal(success, true)
 			assert.equal(char._itemNames.length, 1)
@@ -47,7 +47,7 @@ describe('character', () => {
 			assert.equal(char.items.length, 1)
 		})
 		it('add to much item', () => {
-			const char = new Character(10, 10, 10, 10);
+			const char = new Character('charId', 10, 10, 10, 10);
 			char.addItem("item1")
 			char.addItem("item2")
 			char.addItem("item3")
@@ -61,7 +61,7 @@ describe('character', () => {
 			assert.equal(char._itemNames.length, 6)
 		})
 		it('remove a item', () => {
-			const char = new Character(10, 10, 10, 10);
+			const char = new Character('charId', 10, 10, 10, 10);
 			char.addItem("item1")
 			char.addItem("item2")
 			char.addItem("item3")
@@ -79,26 +79,26 @@ describe('character', () => {
 	describe('attack', () => {
 		describe('defend attack', () => {
 			it('select', () => {
-				const attackerChar = new Character(10, 10, 10, 10);
+				const attackerChar = new Character('charId', 10, 10, 10, 10);
 				attackerChar._attackNames.push("attack1")
 
 				assert.equal(attackerChar.defendAttackName, "attack1")
 			})
 
 			it('no attack found', () => {
-				const attackerChar = new Character(10, 10, 10, 10);
+				const attackerChar = new Character('charId', 10, 10, 10, 10);
 
 				assert.equal(attackerChar.defendAttackName, null)
 			})
 		})
 
 		it('calc turn', () => {
-			const attackerChar = new Character(10, 10, 10, 10);
+			const attackerChar = new Character('charId', 10, 10, 10, 10);
 			const attackerAttack = {
 				repeats: 5,
 				damage: 5,
 			} as Attack
-			const defenderChar = new Character(10, 10, 10, 10);
+			const defenderChar = new Character('charId', 10, 10, 10, 10);
 			const defenderAttack = {
 				repeats: 5,
 				damage: 5,
@@ -138,11 +138,11 @@ describe('character', () => {
 				} as AttacksConfig
 			}
 
-			const attackerChar = new Character(10, 10, 10, 10);
+			const attackerChar = new Character('charId', 10, 10, 10, 10);
 			attackerChar._attackNames.push("attack1")
 			const tile = new Tile("gras", 1, 0)
 
-			const defenderChar = new Character(10, 10, 10, 10);
+			const defenderChar = new Character('charId', 10, 10, 10, 10);
 			defenderChar._attackNames.push("attack2")
 			const defenderCharTile = new Tile("gras", 1, 0)
 
@@ -173,11 +173,11 @@ describe('character', () => {
 				} as AttacksConfig
 			}
 
-			const attackerChar = new Character(10, 10, 10, 10);
+			const attackerChar = new Character('charId', 10, 10, 10, 10);
 			attackerChar._attackNames.push("attack1")
 			const attackerTile = new Tile("gras", 1, 0)
 
-			const defenderChar = new Character(10, 10, 10, 10);
+			const defenderChar = new Character('charId', 10, 10, 10, 10);
 			defenderChar._attackNames.push("attack2")
 			const defenderTile = new Tile("gras", 1, 0)
 

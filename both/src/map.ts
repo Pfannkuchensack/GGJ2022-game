@@ -23,7 +23,7 @@ export class GameMap {
 	neededMovepoints(pos: { q: number, r: number }): number {
 		// todo: check tile
 
-		return 1
+		return 1;
 	}
 
 	getTile(pos: { q: number, r: number }): Tile {

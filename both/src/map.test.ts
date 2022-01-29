@@ -13,7 +13,7 @@ describe('map', () => {
 		it('yes', () => {
 			const map = new GameMap()
 
-			const char = new Character(1, 1, 100, 10)
+			const char = new Character('charId', 1, 1, 100, 10)
 			map.addChar(char)
 			char.setPosition(5, 5)
 
@@ -23,7 +23,7 @@ describe('map', () => {
 		it('no', () => {
 			const map = new GameMap()
 
-			const char = new Character(1, 1, 100, 10)
+			const char = new Character('charId', 1, 1, 100, 10)
 			map.addChar(char)
 			char.setPosition(10, 10)
 
@@ -36,7 +36,7 @@ describe('map', () => {
 		it('add char', () => {
 			const map = new GameMap()
 
-			const char = new Character(1, 1, 100, 10)
+			const char = new Character('charId', 1, 1, 100, 10)
 			map.addChar(char)
 
 			assert.equal(map._chars.length, 1)
@@ -45,11 +45,11 @@ describe('map', () => {
 		it('add more chars', () => {
 			const map = new GameMap()
 
-			const char1 = new Character(1, 1, 100, 10)
+			const char1 = new Character('char1', 1, 1, 100, 10)
 			map.addChar(char1)
-			const char2 = new Character(1, 1, 100, 10)
+			const char2 = new Character('char2', 1, 1, 100, 10)
 			map.addChar(char2)
-			const char3 = new Character(1, 1, 100, 10)
+			const char3 = new Character('char3', 1, 1, 100, 10)
 			map.addChar(char3)
 
 			assert.equal(map._chars.length, 3)
@@ -61,11 +61,11 @@ describe('map', () => {
 		it('remove char', () => {
 			const map = new GameMap()
 
-			const char1 = new Character(1, 1, 100, 10)
+			const char1 = new Character('char1', 1, 1, 100, 10)
 			map.addChar(char1)
-			const char2 = new Character(1, 1, 100, 10)
+			const char2 = new Character('char2', 1, 1, 100, 10)
 			map.addChar(char2)
-			const char3 = new Character(1, 1, 100, 10)
+			const char3 = new Character('char3', 1, 1, 100, 10)
 			map.addChar(char3)
 
 			map.removeChar(char1)

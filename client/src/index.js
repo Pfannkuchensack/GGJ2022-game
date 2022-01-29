@@ -8,7 +8,7 @@ window.addEventListener('load', ()=>{
 
 	var socket = io.connect('ws://localhost:8010', { reconnect: true, transports: ['websocket'], forceNew: true });
 	socket.on('connect', function (data) {
-		socket.emit('go', { gameid: 'test', charid: 'test1'});
+		socket.emit('join', { gameid: 'test'});
 	});
 
 	socket.on('game', function (data) {
@@ -21,9 +21,15 @@ window.addEventListener('load', ()=>{
 	});
 
 	document.getElementById('test').addEventListener('click', ()=>{
-		// alex hier spass haben darf
-		console.log('i clicked UwU');
-		socket.emit('game', { gameid: 'test', charid: 'test1', action: 'test' });
+		socket.emit('game', { gameid: 'test', charid: 'test1', actiontype: 'createChar', data: { name: 'TestDerErste', resistance: 'hallo', attack: 'attack1' } });
+	});
+
+	document.getElementById('test2').addEventListener('click', ()=>{
+		socket.emit('game', { gameid: 'test', charid: 'test1', actiontype: 'move', data: { q: document.getElementById('q').value, r: document.getElementById('r').value} });
+	});
+	
+	document.getElementById('test3').addEventListener('click', ()=>{
+		socket.emit('game', { gameid: 'test', charid: 'test1', actiontype: 'finishturn', data: {} });
 	});
 
 	new Game({
