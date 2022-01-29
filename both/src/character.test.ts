@@ -20,6 +20,22 @@ describe('character', () => {
 		assert.equal(char.movePoints, 10)
 	})
 
+	describe('position', () => {
+		it('set position', () => {
+			const char = new Character(10, 10, 10, 10);
+			char.setPosition(10, 5)
+			assert.equal(char._q, 10)
+			assert.equal(char._r, 5)
+			assert.deepEqual(char.position, { q: 10, r: 5 })
+		})
+		it('equal position', () => {
+			const char = new Character(10, 10, 10, 10);
+			assert.equal(char.equalPosition({ q: 0, r: 0 }), true)
+			char.setPosition(10, 5)
+			assert.equal(char.equalPosition({ q: 10, r: 5 }), true)
+		})
+	})
+
 	describe('items', () => {
 		it('add a item', () => {
 			const char = new Character(10, 10, 10, 10);

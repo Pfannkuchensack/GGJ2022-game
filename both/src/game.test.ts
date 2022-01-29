@@ -11,51 +11,144 @@ describe('game', () => {
 		assert.notEqual(game, null)
 	})
 
-	it('add char', () => {
-		const map = new GameMap()
-		const game = new Game(map)
+	describe('char managment', () => {
+		it('add char', () => {
+			const map = new GameMap()
+			const game = new Game(map)
 
-		const char = new Character(1, 1, 100, 10)
-		game.addChar(char)
+			const char = new Character(1, 1, 100, 10)
+			game.addChar(char)
 
-		assert.equal(game._chars.length, 1)
+			assert.equal(game._chars.length, 1)
+		})
+
+		it('add more chars', () => {
+			const map = new GameMap()
+			const game = new Game(map)
+
+			const char1 = new Character(1, 1, 100, 10)
+			game.addChar(char1)
+			const char2 = new Character(1, 1, 100, 10)
+			game.addChar(char2)
+			const char3 = new Character(1, 1, 100, 10)
+			game.addChar(char3)
+
+			assert.equal(game._chars.length, 3)
+			assert.equal(game._chars[0], char1)
+			assert.equal(game._chars[1], char2)
+			assert.equal(game._chars[2], char3)
+		})
+
+		it('remove char', () => {
+			const map = new GameMap()
+			const game = new Game(map)
+
+			const char1 = new Character(1, 1, 100, 10)
+			game.addChar(char1)
+			const char2 = new Character(1, 1, 100, 10)
+			game.addChar(char2)
+			const char3 = new Character(1, 1, 100, 10)
+			game.addChar(char3)
+
+			game._currentPosition = 2
+
+			game.removeChar(char1)
+			assert.equal(game._chars.length, 2)
+			assert.equal(game._currentPosition, 1)
+			assert.equal(game._chars[0], char2)
+			assert.equal(game._chars[1], char3)
+		})
 	})
 
-	it('add more chars', () => {
-		const map = new GameMap()
-		const game = new Game(map)
+	describe('moveing', () => {
+		it('not your turn', () => {
+			const map = new GameMap()
+			const game = new Game(map)
 
-		const char1 = new Character(1, 1, 100, 10)
-		game.addChar(char1)
-		const char2 = new Character(1, 1, 100, 10)
-		game.addChar(char2)
-		const char3 = new Character(1, 1, 100, 10)
-		game.addChar(char3)
+			const char1 = new Character(1, 1, 100, 10)
+			game.addChar(char1)
+			char1.setPosition(1, 1)
+			const char2 = new Character(1, 1, 100, 10)
+			game.addChar(char2)
 
-		assert.equal(game._chars.length, 3)
-		assert.equal(game._chars[0], char1)
-		assert.equal(game._chars[1], char2)
-		assert.equal(game._chars[2], char3)
+			game._currentPosition = 0;
+
+			const isSuccess = game.moveChar(char2, { q: 10, r: 10 })
+			assert.equal(isSuccess, false, "not players turn!")
+			assert.deepEqual(char2.position, { q: 0, r: 0 })
+		})
+
+		it('your turn', () => {
+			const map = new GameMap()
+			const game = new Game(map)
+
+			const char1 = new Character(1, 1, 100, 10)
+			game.addChar(char1)
+			char1.setPosition(1, 1)
+			const char2 = new Character(1, 1, 100, 10)
+			game.addChar(char2)
+
+			game._currentPosition = 0;
+
+			const isSuccess = game.moveChar(char1, { q: 10, r: 10 })
+			assert.equal(isSuccess, true, "players turn!")
+			assert.deepEqual(char1.position, { q: 10, r: 10 })
+		})
 	})
 
-	it('remove char', () => {
-		const map = new GameMap()
-		const game = new Game(map)
+	describe('attack', () => {
+		const config = {
+			attacks: {
+				"attack1": {
+					damage: 10,
+					repeats: 0
+				},
+				"attack2": {
+					damage: 2,
+					repeats: 10
+				}
+			}
+		}
 
-		const char1 = new Character(1, 1, 100, 10)
-		game.addChar(char1)
-		const char2 = new Character(1, 1, 100, 10)
-		game.addChar(char2)
-		const char3 = new Character(1, 1, 100, 10)
-		game.addChar(char3)
+		it('not your turn', () => {
+			const map = new GameMap()
+			const game = new Game(map)
 
-		game._currentPosition = 2
+			const char1 = new Character(1, 1, 100, 10)
+			game.addChar(char1)
+			char1.setPosition(1, 1)
+			char1._attackNames.push("attack1")
+			const char2 = new Character(1, 1, 100, 10)
+			game.addChar(char2)
+			char2._attackNames.push("attack2")
 
-		game.removeChar(char1)
-		assert.equal(game._chars.length, 2)
-		assert.equal(game._currentPosition, 1)
-		assert.equal(game._chars[0], char2)
-		assert.equal(game._chars[1], char3)
+			game._currentPosition = 0;
+
+			const battleLog = game.attackChar(char2, "attack2", char1, config)
+			assert.equal(battleLog, null, "not players turn!")
+			assert.deepEqual(char2.position, { q: 0, r: 0 })
+		})
+
+		it('your turn', () => {
+			const map = new GameMap()
+			const game = new Game(map)
+
+			const char1 = new Character(1, 1, 100, 10)
+			game.addChar(char1)
+			char1.setPosition(1, 1)
+			char1._attackNames.push("attack1")
+			const char2 = new Character(1, 1, 100, 10)
+			game.addChar(char2)
+			char2._attackNames.push("attack2")
+
+			game._currentPosition = 0;
+
+			const battleLog = game.attackChar(char1, "attack1", char2, config)
+			assert.notEqual(battleLog, null)
+			if (battleLog != null) {
+				assert.equal(battleLog.history.length > 0, true, "players turn!")
+			}
+		})
 	})
 
 	it('finish turn', () => {

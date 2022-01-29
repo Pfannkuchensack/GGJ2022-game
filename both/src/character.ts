@@ -46,6 +46,9 @@ export class Character {
     };
     _attackNames: string[];
     _itemNames: string[];
+    // position
+    _q: number;
+    _r: number;
 
     constructor(level: number, xp: number, hp: number, movePoints: number) {
         this._level = level;
@@ -62,6 +65,8 @@ export class Character {
         };
         this._attackNames = [];
         this._itemNames = [];
+        this._q = 0;
+        this._r = 0;
     }
 
     get xp() {
@@ -80,6 +85,23 @@ export class Character {
     get movePoints() {
         // todo: add items bonus
         return this._movePoints;
+    }
+
+    set movePoints(movePoints: number) {
+        this._movePoints = movePoints;
+    }
+
+    get position(): { q: number, r: number } {
+        return { q: this._q, r: this._r }
+    }
+
+    setPosition(q: number, r: number) {
+        this._q = q;
+        this._r = r;
+    }
+
+    equalPosition(pos: { q: number, r: number }): boolean {
+        return (this._q === pos.q && this._r === pos.r)
     }
 
     get resistance() {
