@@ -12,6 +12,7 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 { from: 'index.html', to: '' },
+                { from: 'assets', to: 'assets' },
             ],
             options: {
                 concurrency: 100,
