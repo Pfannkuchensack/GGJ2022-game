@@ -1,5 +1,6 @@
 {
     "/dist/app.js": "/dist/app.js",
+    "/dist/css/main.css": "/dist/css/main.css",
     "/dist/index.html": "/dist/index.html",
     "/dist/assets/tile.png": "/dist/assets/tile.png"
 }

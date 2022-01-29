@@ -6,18 +6,23 @@ window.addEventListener('load', () => {
 
 	let canvas = document.getElementById('canvas') as
 		HTMLCanvasElement;
-	startApp(canvas);
+    let context = canvas.getContext('2d');
+    if (context !== null) {
+		startApp(canvas, context);
+	}
 });
 
 class App {
 	_map: GameMap;
 	_socket: Socket;
 	_canvas: HTMLCanvasElement;
+    _context: CanvasRenderingContext2D;
 
-	constructor(gameMap: GameMap, socket: Socket, canvas: HTMLCanvasElement) {
+	constructor(gameMap: GameMap, socket: Socket, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		this._map = gameMap;
 		this._socket = socket;
 		this._canvas = canvas;
+        this._context = context;
 	}
 
 	join(gameid: string) {
@@ -70,11 +75,11 @@ class App {
 	}
 }
 
-function startApp(canvas: HTMLCanvasElement) {
+function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 	const socket = io('ws://localhost:8010', { transports: ['websocket'], forceNew: true });
 
 	const gameMap = new GameMap()
-	const app = new App(gameMap, socket, canvas);
+	const app = new App(gameMap, socket, canvas, context);
 
 	socket.on('connect', () => {
 		app.join("test")
