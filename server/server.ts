@@ -196,7 +196,6 @@ log('hi!');
 			log("createChar:", "client has no charId :(((", client.socketId);
 			return;
 		}
-        log("hallo")
 		const game = games[client.gameId];
 		const char = game.getChar(client.charId);
 		if (char !== undefined) {

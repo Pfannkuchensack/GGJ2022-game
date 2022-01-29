@@ -35,6 +35,13 @@ export class GameMap {
 		this._chars.push(char)
 	}
 
+	updateChar(char: Character) {
+		const indexOf = this._chars.indexOf(char);
+		if (indexOf !== -1) {
+			this._chars[indexOf] = char;
+		}
+	}
+
 	removeChar(char: Character) {
 		const indexOf = this._chars.indexOf(char);
 		if (indexOf !== -1) {

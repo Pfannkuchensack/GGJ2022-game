@@ -7,11 +7,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "webpack serve",
-    "build": "webpack"
+    "build": "webpack",
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "npm run development -- --watch",
+    "watch-poll": "npm run watch -- --watch-poll",
+    "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js  --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "author": "",
   "dependencies": {
-    "socket.io-client": "^4.4.1"
+    "cross-env": "^7.0.3",
+    "laravel-mix": "^6.0.41",
+    "socket.io-client": "^4.4.1",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.5"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^10.2.2",
