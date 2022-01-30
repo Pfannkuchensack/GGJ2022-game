@@ -76,7 +76,7 @@ export class Character {
         this._id = id;
         this._remaining_attacks = 1;
         this._direction = 'N';
-        this._name = '#' + Math.round(Math.random() * 1000)
+        this._name = '#' + Math.round(Math.random() * 1000);
     }
 
     get export(): any {
@@ -245,10 +245,10 @@ export class Character {
 
     get defendAttackName(): string | null {
         if (this.attacks.length == 0) {
-            return null
+            return null;
         }
 
-        return this.attacks[0]
+        return this.attacks[0];
     }
 
     addAttack(attackName: string, config: { attacks: AttacksConfig }) {
@@ -257,7 +257,7 @@ export class Character {
         }
 
         // todo: unique attacks
-        this.attacks.push(attackName)
+        this.attacks.push(attackName);
     }
 
     attackChar(attackName: string, tile: Tile, otherChar: Character, otherCharTile: Tile, dryRun: boolean, config: { attacks: AttacksConfig }): BattleLog {
@@ -342,8 +342,8 @@ export class Character {
         const challengedVectorY = challenger.char.position.r - challenged.char.position.r;
 
         if (!dryRun) {
-            challenger.char._hp = Math.max(0, challenger.health)
-            challenged.char._hp = Math.max(0, challenged.health)  
+            challenger.char._hp = Math.max(0, challenger.health);
+            challenged.char._hp = Math.max(0, challenged.health); 
             challenger.char._remaining_attacks--;
 
             challenger.char.setDirection(challengerVectorX, challengerVectorY);

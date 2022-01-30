@@ -140,8 +140,8 @@ export class Renderer {
 			// render ship
 			let movementOffset = -3
 			if (!char.isDead) {
-				const modulo = this._blinkAnimationCounter % 4
-				movementOffset = ((modulo >= 2) ? 4 - modulo : modulo)
+				const modulo = this._blinkAnimationCounter % 4;
+				movementOffset = ((modulo >= 2) ? 4 - modulo : modulo);
 
 				this._ctx.drawImage(this._loader.getImage('jet_blue_' + char.direction + '_40_shadow'), iso.x, iso.y - offsetY);
 			}
@@ -151,7 +151,7 @@ export class Renderer {
 
 		// draw char ui
 		this._map.chars.forEach((char) => {
-			const attackOffset = this._calcAttackOffset(char)
+			const attackOffset = this._calcAttackOffset(char);
 			const iso = this.mapToScreen(char.position.q + attackOffset.x, char.position.r + attackOffset.y);
 
 			if (this._currentAttackAnimation !== undefined) {
@@ -262,7 +262,7 @@ export class Renderer {
 			}
 		}
 
-		return { x: attackOffsetX, y: attackOffsetY }
+		return { x: attackOffsetX, y: attackOffsetY };
 	}
 }
 
