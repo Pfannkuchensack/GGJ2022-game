@@ -55,8 +55,7 @@ export class GameMap {
 
 	neighborsMovepoints(pos: { q: number, r: number }): number[][] {
 		return neighborPositions.map((neighbor: number[]) => {
-			neighbor.push(this.neededMovepoints({ q: pos.q + neighbor[0], r: pos.r + neighbor[1] }))
-			return neighbor
+			return [pos.q, pos.r, this.neededMovepoints({ q: pos.q + neighbor[0], r: pos.r + neighbor[1] })]
 		});
 	}
 
