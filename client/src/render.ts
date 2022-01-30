@@ -1,5 +1,6 @@
 import { GameMap } from '../../both/src/map';
 import { Tile } from '../../both/src/tile';
+import { Loader } from './loader';
 
 export class Renderer {
 	_map: GameMap;
@@ -11,12 +12,9 @@ export class Renderer {
 	_tileHeightHalf: number;
 	_cameraX: number;
 	_cameraY: number;
-	_tile_ground: HTMLImageElement;
-	_jet_blue: HTMLImageElement;
-	_cursor_hover: HTMLImageElement;
-	_cursor_action: HTMLImageElement;
 	_hover_tile: Tile | null;
 	_showMapOptions: boolean;
+	_loader: Loader;
 
 	constructor(gameMap: GameMap, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		this._map = gameMap;
@@ -33,29 +31,31 @@ export class Renderer {
 		this._hover_tile = null;
 		this._showMapOptions = false;
 
-		const tile_ground = document.getElementById('tile_ground') as HTMLImageElement
-		this._tile_ground = tile_ground;
-		const jet_blue = document.getElementById('jet_blue') as HTMLImageElement
-		this._jet_blue = jet_blue;
-		const cursor_hover = document.getElementById('cursor_hover') as HTMLImageElement
-		this._cursor_hover = cursor_hover;
-		const cursor_action = document.getElementById('cursor_action') as HTMLImageElement
-		this._cursor_action = cursor_action;
+		this._loader = new Loader({
+			tile_ground: 'assets/tile_ground.png',
+			jet_blue_E_40: 'assets/jet_blue_E_40.png',
+			cursor_action: 'assets/cursor_action.png',
+			cursor_hover: 'assets/cursor_hover.png',
+		});
+		this._loader.load();
 	}
 
 	draw() {
 		const offsetY = 5
 
-		
-
 		this._ctx.fillStyle = "rgb(16, 17, 18)";
 		this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+
+		if (!this._loader.finish) {
+			this._ctx.fillText('Load Assets: ' + this._loader.process, 20, 20);
+			return
+		}
 
 		this._map.tileStore.forEach((tiles, x) => {
 			tiles.forEach((tile, y) => {
 				const iso = this.mapToScreen(x, y)
 
-				this._ctx.drawImage(this._tile_ground, iso.x, iso.y - offsetY);
+				this._ctx.drawImage(this._loader.getImage('tile_ground'), iso.x, iso.y - offsetY);
 			})
 		});
 
@@ -78,20 +78,20 @@ export class Renderer {
 				const neededPoints = this._map.neededMovepoints(pos);
 				if (neededPoints > 0 && neededPoints <= currentChar.currentMovePoints) {
 					const screen = this.mapToScreen(pos.q, pos.r);
-					this._ctx.drawImage(this._cursor_action, screen.x, screen.y - offsetY);
+					this._ctx.drawImage(this._loader.getImage('cursor_action'), screen.x, screen.y - offsetY);
 				}
 			})
 		}
 
 		if (this._hover_tile) {
 			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
-			this._ctx.drawImage(this._cursor_hover, screen.x, screen.y - offsetY);
+			this._ctx.drawImage(this._loader.getImage('cursor_hover'), screen.x, screen.y - offsetY);
 		}
 
 		this._map.chars.forEach((char) => {
 			const iso = this.mapToScreen(char.position.q, char.position.r);
 
-			this._ctx.drawImage(this._jet_blue, iso.x, iso.y - offsetY);
+			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40'), iso.x, iso.y - offsetY);
 		})
 
 		this._ctx.fillStyle = "rgb(255, 255, 255)";
