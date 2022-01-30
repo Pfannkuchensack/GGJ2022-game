@@ -21,8 +21,8 @@ type GameClientMap = { [key: string]: GameClient }
 type GameList = { [key: string]: Game }
 
 // config
-const PORT = 8010;
-const REDIS_HOST = (process.env.REDIS_HOST) ? process.env.REDIS_HOST : 'redis://localhost';
+const PORT = process.env.SOCKET_PORT ?? 8010;
+const REDIS_HOST = process.env.REDIS_HOST ?? 'redis://localhost';
 
 // game config
 const gameConfig = {
