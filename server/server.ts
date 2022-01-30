@@ -137,11 +137,14 @@ log('hi!');
 
 		socket.on('disconnect', reason => {
 			if (!clients.hasOwnProperty(socket.id)) {
-				return
+				return;
 			}
 
 			const client = clients[socket.id];
 			const game = games[client.gameId];
+			if (!game){
+				log("socketIO[disconnect]", "game already deleted!", socket.id);
+			}
 			const char = game.getChar(socket.id)
 			if (char !== undefined) {
 				log("socketIO[disconnect]", "delete char", char.id)
