@@ -101,8 +101,6 @@ export class Game {
 			return false
 		}
 
-		this._map.neighborsMovepoints(char.position)
-
 		const neighborPositions = [
 			[-1, -1],
 			[0, -1],
