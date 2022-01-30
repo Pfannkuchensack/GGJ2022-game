@@ -3,6 +3,9 @@ import { Character } from '../../both/src/character';
 import { GameMap } from '../../both/src/map';
 import { Renderer } from './render';
 
+const music = new Audio('assets/ambience_music.mp3')
+music.loop = true;
+
 window.addEventListener('load', () => {
 	'use strict';
 
@@ -205,6 +208,7 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 
 	const startBtn = document.getElementById('start') as HTMLCanvasElement;
 	startBtn.addEventListener('click', () => {
+		music.play();
 		app.createChar('TestDerErste', 'hallo', 'attack1');
 		(document.getElementById('overlay') as HTMLCanvasElement).classList.remove('active');
 	});
