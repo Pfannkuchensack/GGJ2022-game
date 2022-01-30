@@ -203,7 +203,14 @@ log('hi!');
 			return;
 		}
 
+		let username = '#' + Math.round(Math.random() * 1000);
+
+		if (action.name.length > 0 && action.name.length < 15) {
+			username = action.name;
+		}
+
 		const char = new Character(client.socketId, 1, 0, 100, 3);
+		char.name = username;
 		char.setPosition(2, 2);
 		char.addAttack(action.attack, gameConfig);
 		// todo: add resistance

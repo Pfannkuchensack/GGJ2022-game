@@ -53,6 +53,7 @@ export class Character {
     _id: string;
     _remaining_attacks: number;
     _direction: string;
+    _name: string;
 
     constructor(id: string, level: number, xp: number, hp: number, movePoints: number) {
         this._level = level;
@@ -75,6 +76,7 @@ export class Character {
         this._id = id;
         this._remaining_attacks = 1;
         this._direction = 'N';
+        this._name = '#' + Math.round(Math.random() * 1000)
     }
 
     get export(): any {
@@ -90,7 +92,8 @@ export class Character {
             r: this._r,
             id: this._id,
             remaining_attacks: this._remaining_attacks,
-            direction: this._direction
+            direction: this._direction,
+            name: this._name
         }
     }
 
@@ -107,10 +110,19 @@ export class Character {
         this._id = data.id;
         this._remaining_attacks = data.remaining_attacks;
         this._direction = data.direction;
+        this._name = data.name;
     }
 
     get id() {
         return this._id;
+    }
+
+    get name(): string {
+        return this._name;
+    }
+
+    set name(name: string) {
+        this._name = name;
     }
 
     get xp() {

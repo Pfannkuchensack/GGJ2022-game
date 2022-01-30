@@ -161,10 +161,14 @@ class App {
 
 				if (event.data.history.length > 0) {
 					const challenger = this._map.getCharById(event.data.history[0].attackerId)
-					const challenged = this._map.getCharById(event.data.history[0].defenderId)
+					if (challenger !== undefined) {
+						challenger._direction = event.data.challengerDirection
+					}
 
-					challenger._direction = event.data.challengerDirection
-					challenged._direction = event.data.challengedDirection
+					const challenged = this._map.getCharById(event.data.history[0].defenderId)
+					if (challenged !== undefined) {
+						challenged._direction = event.data.challengedDirection						
+					}
 				}
 
 				if (this._map._playerChar !== undefined) {
@@ -184,7 +188,13 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 	const app = new App(gameMap, socket, canvas, context);
 
 	socket.on('connect', () => {
-		app.join("test")
+		let hash = "default"
+		if(window.location.hash) {
+			hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+		}
+		console.log("join game "+hash+"...");
+
+		app.join(hash)
 	});
 
 	socket.on('game', (data) => {
@@ -209,7 +219,10 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 	const startBtn = document.getElementById('start') as HTMLCanvasElement;
 	startBtn.addEventListener('click', () => {
 		music.play();
-		app.createChar('TestDerErste', 'hallo', 'attack1');
+
+		const userinput = (document.getElementById('username') as HTMLInputElement);
+
+		app.createChar(userinput.value, 'hallo', 'attack1');
 		(document.getElementById('overlay') as HTMLCanvasElement).classList.remove('active');
 	});
 

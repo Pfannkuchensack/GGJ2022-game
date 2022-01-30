@@ -143,10 +143,10 @@ export class Renderer {
 				const modulo = this._blinkAnimationCounter % 4
 				movementOffset = ((modulo >= 2) ? 4 - modulo : modulo)
 
-				this._ctx.drawImage(this._loader.getImage('jet_blue_'+char.direction+'_40_shadow'), iso.x, iso.y - offsetY);
+				this._ctx.drawImage(this._loader.getImage('jet_blue_' + char.direction + '_40_shadow'), iso.x, iso.y - offsetY);
 			}
 
-			this._ctx.drawImage(this._loader.getImage('jet_blue_'+char.direction+'_40'), iso.x, iso.y - offsetY + movementOffset);
+			this._ctx.drawImage(this._loader.getImage('jet_blue_' + char.direction + '_40'), iso.x, iso.y - offsetY + movementOffset);
 		})
 
 		// draw char ui
@@ -158,13 +158,14 @@ export class Renderer {
 				const step = this._currentAttackAnimation[0];
 				if (step.defenderId === char.id) {
 					const damageOffsetY = mapRange(this._currentAttackAnimationTimer, 0, 2, 0, 10);
-					this._ctx.fillStyle = "red";
+					this._ctx.fillStyle = "black";
 					this._ctx.fillText("-" + step.damage, iso.x + this._tileWidthHalf / 2 + 10, iso.y - 23 - damageOffsetY);
 				}
 			}
 
 			if (!char.isDead) {
 				this._ctx.fillStyle = "black";
+				this._ctx.fillText(char.name, iso.x + this._tileWidthHalf / 2, iso.y - 25);
 				this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 10);
 				this._ctx.beginPath();
 				this._ctx.fillStyle = "red";
