@@ -188,7 +188,7 @@ class App {
 }
 
 function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
-	const socket = io('ws://localhost:8010', { transports: ['websocket'], forceNew: true });
+	const socket = io({ transports: ['websocket'], forceNew: true });
 
 	const gameMap = new GameMap()
 	const app = new App(gameMap, socket, canvas, context);
