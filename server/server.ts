@@ -210,12 +210,17 @@ log('hi!');
 		}
 
 		const char = new Character(client.socketId, 1, 0, 100, 3);
+		const game = games[client.gameId];
 		char.name = username;
 		char.setPosition(2, 2);
+		while(!game._map.isPositionFree(char.position))
+		{
+			char.setPosition(2, 2);
+		}
+
 		char.addAttack(action.attack, gameConfig);
 		// todo: add resistance
 
-		const game = games[client.gameId];
 		game.addChar(char);
 
 		// save char on client

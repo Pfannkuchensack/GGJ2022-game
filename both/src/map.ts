@@ -44,7 +44,7 @@ export class GameMap {
 
 	getTile(pos: { q: number, r: number }): Tile | undefined {
 		if (pos.q < 0 || pos.q >= this._tiles.length || pos.r < 0 || pos.r >= this._tiles[pos.q].length) {
-			return undefined
+			return undefined;
 		}
 		return this._tiles[pos.q][pos.r];
 	}
@@ -54,13 +54,13 @@ export class GameMap {
 	}
 
 	addChar(char: Character) {
-		this._chars.push(char)
+		this._chars.push(char);
 	}
 
 	getCharAt(q: number, r: number): Character | undefined {
 		for (let index = 0; index < this._chars.length; index++) {
 			if (this._chars[index].equalPosition({ q: q, r: r })) {
-				return this._chars[index]
+				return this._chars[index];
 			}
 		}
 
@@ -74,7 +74,7 @@ export class GameMap {
 	getCharById(charId: string): Character | undefined {
 		for (let index = 0; index < this._chars.length; index++) {
 			if (this._chars[index].id === charId) {
-				return this._chars[index]
+				return this._chars[index];
 			}
 		}
 		return undefined

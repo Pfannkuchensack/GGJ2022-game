@@ -6,6 +6,10 @@ import { Renderer } from './render';
 const music = new Audio('assets/ambience_music.mp3')
 music.loop = true;
 
+const attacksound = new Audio('assets/attack.mp3')
+attacksound.volume = 0.1; // Mir fallen sonst die Ohren ab :(
+attacksound.loop = false;
+
 window.addEventListener('load', () => {
 	'use strict';
 
@@ -162,12 +166,14 @@ class App {
 				if (event.data.history.length > 0) {
 					const challenger = this._map.getCharById(event.data.history[0].attackerId)
 					if (challenger !== undefined) {
-						challenger._direction = event.data.challengerDirection
+						challenger._direction = event.data.challengerDirection;
+						attacksound.play();	
 					}
 
 					const challenged = this._map.getCharById(event.data.history[0].defenderId)
 					if (challenged !== undefined) {
-						challenged._direction = event.data.challengedDirection						
+						challenged._direction = event.data.challengedDirection;
+						attacksound.play();						
 					}
 				}
 
@@ -194,7 +200,7 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 		}
 		console.log("join game "+hash+"...");
 
-		app.join(hash)
+		app.join(hash);
 	});
 
 	socket.on('game', (data) => {
