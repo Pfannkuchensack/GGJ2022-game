@@ -165,10 +165,10 @@ export class Renderer {
 
 			if (!char.isDead) {
 				this._ctx.fillStyle = "black";
-				this._ctx.fillText(char.name, iso.x + this._tileWidthHalf / 2, iso.y - 25);
-				this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 10);
+				this._ctx.fillText(char.name, iso.x + this._tileWidthHalf / 2, iso.y - 28);
+				this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 13);
 				this._ctx.beginPath();
-				this._ctx.fillStyle = "red";
+				this._ctx.fillStyle = "#0000ff";
 				this._ctx.rect(iso.x + this._tileWidthHalf / 2, iso.y - 10, mapRange(char.hp, 0, 100, 0, 46), 5);
 				this._ctx.fill();
 			} else {
