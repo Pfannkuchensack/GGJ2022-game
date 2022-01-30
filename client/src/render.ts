@@ -1,3 +1,4 @@
+import { Character } from '../../both/src/character';
 import { GameMap } from '../../both/src/map';
 import { Tile } from '../../both/src/tile';
 import { Loader } from './loader';
@@ -84,7 +85,7 @@ export class Renderer {
 		});
 
 		// draw player options
-		if (this._map._playerChar !== undefined && this._showMapOptions) {
+		if (this._map._playerChar !== undefined && this._showMapOptions && this._currentAttackAnimation === undefined) {
 			const currentChar = this._map._playerChar;
 
 			const neighborPositions = [
@@ -121,28 +122,46 @@ export class Renderer {
 
 		// draw chars
 		this._map.chars.forEach((char) => {
-			const iso = this.mapToScreen(char.position.q, char.position.r);
+			// render damage animation
+			const attackOffset = this._calcAttackOffset(char)
+			const iso = this.mapToScreen(char.position.q + attackOffset.x, char.position.r + attackOffset.y);
 
+			// render ship
 			let movementOffset = -3
 			if (!char.isDead) {
 				const modulo = this._blinkAnimationCounter % 4
 				movementOffset = ((modulo >= 2) ? 4 - modulo : modulo)
 
 				this._ctx.drawImage(this._loader.getImage('jet_blue_E_40_shadow'), iso.x, iso.y - offsetY);
-				this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 10);
-			} else {
-				this._ctx.fillText('DEAD', iso.x + this._tileWidthHalf / 2, iso.y - 10);
-			}
-
-			// render damage animation
-			if (this._currentAttackAnimation !== undefined) {
-				const step = this._currentAttackAnimation[0];
-				if (step.defenderId === char.id) {
-					this._ctx.fillText("-" + step.damage, iso.x + this._tileWidthHalf / 2 + 10, iso.y - 23);
-				}
 			}
 
 			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40'), iso.x, iso.y - offsetY + movementOffset);
+		})
+
+		// draw char ui
+		this._map.chars.forEach((char) => {
+			const attackOffset = this._calcAttackOffset(char)
+			const iso = this.mapToScreen(char.position.q + attackOffset.x, char.position.r + attackOffset.y);
+
+			if (this._currentAttackAnimation !== undefined) {
+				const step = this._currentAttackAnimation[0];
+				if (step.defenderId === char.id) {
+					const damageOffsetY = mapRange(this._currentAttackAnimationTimer, 0, 2, 0, 10);
+					this._ctx.fillStyle = "red";
+					this._ctx.fillText("-" + step.damage, iso.x + this._tileWidthHalf / 2 + 10, iso.y - 23 - damageOffsetY);
+				}
+			}
+
+			if (!char.isDead) {
+				this._ctx.fillStyle = "black";
+				this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 10);
+				this._ctx.beginPath();
+				this._ctx.fillStyle = "red";
+				this._ctx.rect(iso.x + this._tileWidthHalf / 2, iso.y - 10, mapRange(char.hp, 0, 100, 0, 46), 5);
+				this._ctx.fill();
+			} else {
+				this._ctx.fillText('DEAD', iso.x + this._tileWidthHalf / 2, iso.y - 10);
+			}
 		})
 
 		// draw metadata
@@ -166,7 +185,7 @@ export class Renderer {
 				this._currentAttackAnimationTimer = 0;
 
 				if (this._currentAttackAnimation.length === 0) {
-					this._currentAttackAnimation = undefined;
+					this.stopAttackAnimation()
 				}
 			}
 		}
@@ -178,6 +197,11 @@ export class Renderer {
 
 	startAttackAnimation(event: { history: { attackerId: string, defenderId: string, damage: number }[] }) {
 		this._currentAttackAnimation = event.history
+	}
+
+	stopAttackAnimation() {
+		this._currentAttackAnimation = undefined;
+		this._currentAttackAnimationTimer = 0;
 	}
 
 	hoverScreen(screenX: number, screenY: number) {
@@ -207,4 +231,31 @@ export class Renderer {
 
 		return { q: Math.floor(mapX), r: Math.round(mapY) };
 	}
+
+	_calcAttackOffset(char: Character): { x: number, y: number } {
+		let attackOffsetX = 0;
+		let attackOffsetY = 0;
+		if (this._currentAttackAnimation !== undefined) {
+			const step = this._currentAttackAnimation[0];
+			if (step.attackerId === char.id) {
+				const defender = this._map.getCharById(step.defenderId);
+				if (defender !== undefined) {
+					const vectorX = defender.position.q - char.position.q
+					const vectorY = defender.position.r - char.position.r;
+					const speed = 2;
+					attackOffsetX = vectorX * mapRange(Math.min(this._currentAttackAnimationTimer * speed, 2), 0, 2, 0, 0.5);
+					attackOffsetY = vectorY * mapRange(Math.min(this._currentAttackAnimationTimer * speed, 2), 0, 2, 0, 0.5);
+				}
+			}
+		}
+
+		return { x: attackOffsetX, y: attackOffsetY }
+	}
+}
+
+function mapRange(value: number, a: number, b: number, c: number, d: number): number {
+	// first map value from (a..b) to (0..1)
+	value = (value - a) / (b - a);
+	// then map it from (0..1) to (c..d) and return it
+	return c + value * (d - c);
 }
