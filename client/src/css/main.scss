@@ -1,3 +1,8 @@
+$shadow50: 1px 1px 2px #000e;
+
+$blockShadow100: 4px 4px #0004;
+$blockShadow200: 8px 8px #0004;
+
 html, body{
   margin: 0;
   height: 100%;
@@ -10,14 +15,23 @@ body{
   font-family: Mono, Monospace, monospace;
 }
 
+button{
+  border: none;
+  padding: .5rem 1rem;
+  background-color: #111;
+  box-shadow: $blockShadow100;
+  margin: .5rem;
+  color: #fff;
+  cursor: pointer;
+  transition: all .4s;
+  &:hover{
+    box-shadow: $blockShadow200;
+  }
+}
+
 .hidden{
   display: none;
 }
-
-$shadow50: 1px 1px 2px #000e;
-
-$blockShadow100: 4px 4px #0004;
-$blockShadow200: 8px 8px #0004;
 
 #app{
   display: flex;
@@ -42,29 +56,41 @@ $blockShadow200: 8px 8px #0004;
     flex-wrap: wrap;
     margin: 2rem 1rem;
 
-    #canvas{
-      border: none;
-      background-color: #000;
-      //aspect-ratio: 16/9;
-      box-shadow: $blockShadow200;
-      max-width: 100%;
+    .canvasWrapper{
+      position: relative;
+      #canvas{
+        position: relative;
+        border: none;
+        background-color: #000;
+        //aspect-ratio: 16/9;
+        box-shadow: $blockShadow200;
+        max-width: 100%;
+      }
+      .overlay{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        &.active{
+          background-color: #222a;
+        }
+        .buttonWrapper{
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          button{
+            background-color: #266379;
+            font-size: 1.2rem;
+            font-weight: bold;
+          }
+        }
+      }
     }
 
     .actions{
       margin: 2rem;
-      button{
-        border: none;
-        padding: .5rem 1rem;
-        background-color: #111;
-        box-shadow: $blockShadow100;
-        margin: .5rem;
-        color: #fff;
-        cursor: pointer;
-        transition: all .4s;
-        &:hover{
-          box-shadow: $blockShadow200;
-        }
-      }
     }
   }
   footer{
