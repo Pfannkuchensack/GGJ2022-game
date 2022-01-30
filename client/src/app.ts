@@ -29,8 +29,8 @@ class App {
 		this._renderer = new Renderer(this._map, this._canvas, this._context);
 	}
 
-	startLoop() {
-		this._renderer.draw()
+	startLoop(now: number) {
+		this._renderer.draw(now)
 		window.requestAnimationFrame(this.startLoop.bind(this));
 	}
 
@@ -180,5 +180,5 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 		app.finishturn();
 	});
 
-	app.startLoop();
+	app.startLoop(0);
 }

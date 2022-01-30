@@ -16,6 +16,9 @@ export class Renderer {
 	_showMapOptions: boolean;
 	_loader: Loader;
 
+	_blinkAnimationCounter: number;
+	_previousTimeStamp: number;
+
 	constructor(gameMap: GameMap, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		this._map = gameMap;
 		this._canvas = canvas;
@@ -34,23 +37,37 @@ export class Renderer {
 		this._loader = new Loader({
 			tile_ground: 'assets/tile_ground.png',
 			jet_blue_E_40: 'assets/jet_blue_E_40.png',
+			jet_blue_E_40_shadow: 'assets/jet_blue_E_40_shadow.png',
 			cursor_action: 'assets/cursor_action.png',
 			cursor_hover: 'assets/cursor_hover.png',
 		});
 		this._loader.load();
+
+		this._blinkAnimationCounter = 0
+		this._previousTimeStamp = 0
 	}
 
-	draw() {
+	draw(now: number) {
 		const offsetY = 5
 
+		const time_delta = now - this._previousTimeStamp
+		this._previousTimeStamp = now;
+		this._blinkAnimationCounter += time_delta / 500
+		if (this._blinkAnimationCounter > 10) {
+			this._blinkAnimationCounter = 0
+		}
+
+		// draw background
 		this._ctx.fillStyle = "rgb(16, 17, 18)";
 		this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
 
+		// wait for image loading
 		if (!this._loader.finish) {
 			this._ctx.fillText('Load Assets: ' + this._loader.process, 20, 20);
 			return
 		}
 
+		// draw tiles
 		this._map.tileStore.forEach((tiles, x) => {
 			tiles.forEach((tile, y) => {
 				const iso = this.mapToScreen(x, y)
@@ -59,6 +76,7 @@ export class Renderer {
 			})
 		});
 
+		// draw player options
 		if (this._map._playerChar !== undefined && this._showMapOptions) {
 			const currentChar = this._map._playerChar;
 
@@ -83,17 +101,24 @@ export class Renderer {
 			})
 		}
 
-		if (this._hover_tile) {
+		// draw hover
+		if (this._hover_tile && this._blinkAnimationCounter % 2 < 1) {
 			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
 			this._ctx.drawImage(this._loader.getImage('cursor_hover'), screen.x, screen.y - offsetY);
 		}
 
+		// draw chars
 		this._map.chars.forEach((char) => {
 			const iso = this.mapToScreen(char.position.q, char.position.r);
 
-			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40'), iso.x, iso.y - offsetY);
+			const modulo = this._blinkAnimationCounter % 4
+			const movementOffset = ((modulo >= 2) ? 4 - modulo : modulo)
+			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40_shadow'), iso.x, iso.y - offsetY);
+			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40'), iso.x, iso.y - offsetY + movementOffset);
+			this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 10);
 		})
 
+		// draw metadata
 		this._ctx.fillStyle = "rgb(255, 255, 255)";
 		if (this._map._playerChar !== undefined) {
 			this._ctx.fillText('Spieler: ' + this._map._playerChar?.id, 600, 50);
