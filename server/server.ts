@@ -125,6 +125,9 @@ log('hi!');
 					case "move":
 						moveChar(action.data, clients[socket.id]);
 						break;
+					case "attack":
+						attackChar(action.data, clients[socket.id]);
+						break;
 					case "finishturn":
 						finishTurn(action.data, clients[socket.id]);
 				}
@@ -142,7 +145,7 @@ log('hi!');
 
 			const client = clients[socket.id];
 			const game = games[client.gameId];
-			if (!game){
+			if (!game) {
 				log("socketIO[disconnect]", "game already deleted!", socket.id);
 				return;
 			}
@@ -220,7 +223,7 @@ log('hi!');
 	// Move char
 	function moveChar(action: { q: number, r: number }, client: GameClient) {
 		if (client.charId === undefined) {
-			log("createChar:", "client has no charId :(((", client.socketId);
+			log("moveChar:", "client has no charId :(((", client.socketId);
 			return;
 		}
 		const game = games[client.gameId];
@@ -236,6 +239,47 @@ log('hi!');
 			redisPub.publish('game:' + client.gameId, JSON.stringify({ 'actiontype': 'move', 'data': char.export }));
 			log("moveChar:", "char moved.", client.charId, char);
 		}
+	}
+
+	// attack char
+	function attackChar(action: { charId: string, attackName: string }, client: GameClient) {
+		if (client.charId === undefined) {
+			log("attackChar:", "client has no charId :(((", client.socketId);
+			return;
+		}
+
+		if (client.charId === action.charId) {
+			log("attackChar:", "client self attack :(((", client.socketId);
+			return;
+		}
+
+		const game = games[client.gameId];
+		const challenger = game.getChar(client.charId);
+		if (challenger === undefined) {
+			return;
+		}
+
+		const challenged = game.getChar(action.charId);
+		if (challenged === undefined) {
+			return;
+		}
+
+		// attack
+		const battleLog = game.attackChar(challenger, action.attackName, challenged, gameConfig);
+		if (battleLog === null) {
+			log("attackChar:", "char not attacked.", challenger, action.attackName, challenged);
+			return;
+		}
+
+		// broadcast
+		redisPub.publish('game:' + client.gameId, JSON.stringify({
+			actiontype: 'attack',
+			data: {
+				history: battleLog.history
+			}
+		}));
+		sendState(client, true);
+		log("attackChar:", "char attack.", challenger, action.attackName, challenged);
 	}
 
 	// finish turn

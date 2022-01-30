@@ -118,6 +118,10 @@ export class Character {
         return this._hp;
     }
 
+    get isDead() {
+        return this.hp <= 0;
+    }
+
     get currentMovePoints() {
         return this._currentMovePoints;
     }

@@ -95,6 +95,11 @@ export class Renderer {
 				const pos = { q: currentChar.position.q + neighbor[0], r: currentChar.position.r + neighbor[1] }
 				const neededPoints = this._map.neededMovepoints(pos);
 				if (neededPoints > 0 && neededPoints <= currentChar.currentMovePoints) {
+					const char = this._map.getCharAt(pos.q, pos.r);
+					if (char !== undefined && char.isDead) {
+						return
+					}
+
 					const screen = this.mapToScreen(pos.q, pos.r);
 					this._ctx.drawImage(this._loader.getImage('cursor_action'), screen.x, screen.y - offsetY);
 				}
@@ -111,11 +116,18 @@ export class Renderer {
 		this._map.chars.forEach((char) => {
 			const iso = this.mapToScreen(char.position.q, char.position.r);
 
-			const modulo = this._blinkAnimationCounter % 4
-			const movementOffset = ((modulo >= 2) ? 4 - modulo : modulo)
-			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40_shadow'), iso.x, iso.y - offsetY);
+			let movementOffset = -3
+			if (!char.isDead) {
+				const modulo = this._blinkAnimationCounter % 4
+				movementOffset = ((modulo >= 2) ? 4 - modulo : modulo)
+
+				this._ctx.drawImage(this._loader.getImage('jet_blue_E_40_shadow'), iso.x, iso.y - offsetY);
+				this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 10);
+			} else {
+				this._ctx.fillText('DEAD', iso.x + this._tileWidthHalf / 2, iso.y - 10);
+			}
+
 			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40'), iso.x, iso.y - offsetY + movementOffset);
-			this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 10);
 		})
 
 		// draw metadata
@@ -123,8 +135,7 @@ export class Renderer {
 		if (this._map._playerChar !== undefined) {
 			this._ctx.fillText('Spieler: ' + this._map._playerChar?.id, 600, 50);
 			this._ctx.fillText('Moves: ' + this._map._playerChar?.currentMovePoints, 600, 65);
-			this._ctx.fillText('Moves: ' + this._map._playerChar?.position.q, 600, 80);
-			this._ctx.fillText('Moves: ' + this._map._playerChar?.position.r, 600, 95);
+			this._ctx.fillText('HP: ' + this._map._playerChar?.hp, 600, 80);
 		}
 	}
 
