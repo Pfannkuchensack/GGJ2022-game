@@ -40,6 +40,10 @@ export class Game {
 			// todo: set currentPosition to -1 to activate KI move phase
 		}
 
+		if (this.currentChar.isDead) {
+			return this.finishTurn(this.currentChar)
+		}
+
 		return true
 	}
 
@@ -101,27 +105,8 @@ export class Game {
 			return false
 		}
 
-		const neighborPositions = [
-			[-1, -1],
-			[0, -1],
-			[1, -1],
-			[1, 0],
-			[1, 1],
-			[0, 1],
-			[-1, 1],
-			[-1, 0],
-		] as number[][]
 
-		let found = false;
-		for (let index = 0; index < neighborPositions.length; index++) {
-			const neighbor = neighborPositions[index];
-
-			if (nextPos.q === char.position.q + neighbor[0] && nextPos.r === char.position.r + neighbor[1]) {
-				found = true;
-			}
-		}
-
-		if (!found) {
+		if (!this.isNeighbor(char.position, nextPos)) {
 			//console.log('field not neighboring!');
 			return false;
 		}
@@ -140,7 +125,13 @@ export class Game {
 			return null
 		}
 
-		// todo: check range
+		if (challenger.isDead || challenged.isDead) {
+			return null;
+		}
+
+		if (!this.isNeighbor(challenger.position, challenged.position)) {
+			return null;
+		}
 
 		// get ground informations
 		const challengerTile = this._map.getTile(challenger.position)
@@ -150,5 +141,28 @@ export class Game {
 		}
 
 		return challenger.attackChar(challengerAttackName, challengerTile, challenged, challengedTile, false, config)
+	}
+
+	isNeighbor(posA: { q: number, r: number }, posB: { q: number, r: number }): boolean {
+		const neighborPositions = [
+			[-1, -1],
+			[0, -1],
+			[1, -1],
+			[1, 0],
+			[1, 1],
+			[0, 1],
+			[-1, 1],
+			[-1, 0],
+		] as number[][]
+
+		for (let index = 0; index < neighborPositions.length; index++) {
+			const neighbor = neighborPositions[index];
+
+			if (posB.q === posA.q + neighbor[0] && posB.r === posA.r + neighbor[1]) {
+				return true
+			}
+		}
+
+		return false
 	}
 }

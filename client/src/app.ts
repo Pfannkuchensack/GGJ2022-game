@@ -59,6 +59,16 @@ class App {
 		})
 	}
 
+	attack(charId: string, attackName: string) {
+		this._socket.emit('game', {
+			actiontype: "attack",
+			data: {
+				attackName: attackName,
+				charId: charId
+			}
+		})
+	}
+
 	finishturn() {
 		this._socket.emit('game', {
 			actiontype: "finishturn",
@@ -68,7 +78,13 @@ class App {
 
 	click(x: number, y: number) {
 		const pos = this._renderer.screenToMap(x, y);
-		this.move(pos.q, pos.r);
+
+		const char = this._map.getCharAt(pos.q, pos.r)
+		if (char === undefined) {
+			this.move(pos.q, pos.r);			
+		} else if (this._map._playerChar !== undefined && this._map._playerChar.attacks.length > 0) {
+			this.attack(char.id, this._map._playerChar?.attacks[0])
+		}
 	}
 
 	hover(x: number, y: number) {
@@ -130,6 +146,9 @@ class App {
 					oldChar.import(event.data)
 					console.log(oldChar, oldChar.position);
 				}
+				break;
+			case 'attack':
+				console.log("attack", event.data)
 				break;
 			default:
 				console.log("?!?!?!?!ß111elf", event.actiontype, event.data);
