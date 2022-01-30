@@ -14,16 +14,18 @@
                         <canvas id="canvas" width="800" height="600"></canvas>
                         <div class="actions">
                             <span id="info"></span><br>
-                            <button id="createChar" class="hidden">Create</button>
                             <div id="toolbar">
+                                <button id="createChar" class="hidden">Create</button>
                                 <button id="finishturn">Finish</button>
                             </div>
                         </div>
                         <div id="overlay" class="overlay active">
                             <div class="buttonWrapper">
                                 <h2>Start Game</h2>
-                                <label for="username">Username</label>
-                                <input type="text" name="username" id="username" />
+                                <div class="inputWrapper">
+                                    <input type="text" name="username" id="username" placeholder=" "/>
+                                    <label for="username" class="floating">Username</label>
+                                </div>
                                 <button id="start">Start</button>
                             </div>
                         </div>
