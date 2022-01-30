@@ -125,7 +125,7 @@ export class Game {
 			return null
 		}
 
-		if (challenger.isDead || challenged.isDead) {
+		if (challenger.isDead || challenged.isDead || challenger.remainingAttacks <= 0) {
 			return null;
 		}
 

@@ -51,6 +51,7 @@ export class Character {
     _q: number;
     _r: number;
     _id: string;
+    _remaining_attacks: number;
 
     constructor(id: string, level: number, xp: number, hp: number, movePoints: number) {
         this._level = level;
@@ -71,6 +72,7 @@ export class Character {
         this._q = 0;
         this._r = 0;
         this._id = id;
+        this._remaining_attacks = 1;
     }
 
     get export(): any {
@@ -84,7 +86,8 @@ export class Character {
             itemNames: this._itemNames,
             q: this._q,
             r: this._r,
-            id: this._id
+            id: this._id,
+            remaining_attacks: this._remaining_attacks
         }
     }
 
@@ -99,6 +102,7 @@ export class Character {
         this._q = data.q;
         this._r = data.r;
         this._id = data.id;
+        this._remaining_attacks = data.remaining_attacks;
     }
 
     get id() {
@@ -139,8 +143,13 @@ export class Character {
         this._baseMovePoints = movePoints;
     }
 
+    get remainingAttacks() {
+        return this._remaining_attacks;
+    }
+
     reset() {
-        this._currentMovePoints = this.maxMovePoints
+        this._currentMovePoints = this.maxMovePoints;
+        this._remaining_attacks = 1;
     }
 
     get position(): { q: number, r: number } {
@@ -289,7 +298,8 @@ export class Character {
 
         if (!dryRun) {
             challenger.char._hp = Math.max(0, challenger.health)
-            challenged.char._hp = Math.max(0, challenged.health)            
+            challenged.char._hp = Math.max(0, challenged.health)  
+            challenger.char._remaining_attacks--;          
         }
 
         return {

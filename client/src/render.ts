@@ -104,7 +104,7 @@ export class Renderer {
 				const neededPoints = this._map.neededMovepoints(pos);
 				if (neededPoints > 0 && neededPoints <= currentChar.currentMovePoints) {
 					const char = this._map.getCharAt(pos.q, pos.r);
-					if (char !== undefined && char.isDead) {
+					if (char !== undefined && (char.isDead || currentChar.remainingAttacks <= 0)) {
 						return
 					}
 
@@ -169,7 +169,8 @@ export class Renderer {
 		if (this._map._playerChar !== undefined) {
 			this._ctx.fillText('Spieler: ' + this._map._playerChar?.id, 600, 50);
 			this._ctx.fillText('Moves: ' + this._map._playerChar?.currentMovePoints, 600, 65);
-			this._ctx.fillText('HP: ' + this._map._playerChar?.hp, 600, 80);
+			this._ctx.fillText('Remaining Attacks:' + this._map._playerChar?.remainingAttacks, 600, 80);
+			this._ctx.fillText('HP: ' + this._map._playerChar?.hp, 600, 95);
 		}
 
 		if (this._currentAttackAnimation !== undefined) {

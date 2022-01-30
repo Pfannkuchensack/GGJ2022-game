@@ -81,7 +81,7 @@ class App {
 
 		const char = this._map.getCharAt(pos.q, pos.r)
 		if (char === undefined) {
-			this.move(pos.q, pos.r);			
+			this.move(pos.q, pos.r);
 		} else if (this._map._playerChar !== undefined && this._map._playerChar.attacks.length > 0) {
 			this.attack(char.id, this._map._playerChar?.attacks[0])
 		}
@@ -155,6 +155,9 @@ class App {
 			case 'attack':
 				console.log("attack", event.data)
 				this._renderer.startAttackAnimation(event.data)
+				if (this._map._playerChar !== undefined) {
+					this._map._playerChar._remaining_attacks--;
+				}
 				break;
 			default:
 				console.log("?!?!?!?!ß111elf", event.actiontype, event.data);
