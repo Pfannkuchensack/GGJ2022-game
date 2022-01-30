@@ -179,10 +179,10 @@ export class Renderer {
 		// draw metadata
 		this._ctx.fillStyle = "rgb(255, 255, 255)";
 		if (this._map._playerChar !== undefined) {
-			this._ctx.fillText('Spieler: ' + this._map._playerChar?.id, 600, 50);
-			this._ctx.fillText('Moves: ' + this._map._playerChar?.currentMovePoints, 600, 65);
-			this._ctx.fillText('Remaining Attacks:' + this._map._playerChar?.remainingAttacks, 600, 80);
-			this._ctx.fillText('HP: ' + this._map._playerChar?.hp, 600, 95);
+			this._ctx.fillText('Spieler: ' + this._map._playerChar?.name, 20, 50);
+			this._ctx.fillText('Moves: ' + this._map._playerChar?.currentMovePoints, 20, 65);
+			this._ctx.fillText('Remaining Attacks:' + this._map._playerChar?.remainingAttacks, 20, 80);
+			this._ctx.fillText('HP: ' + this._map._playerChar?.hp, 20, 95);
 		}
 
 		if (this._currentAttackAnimation !== undefined) {
