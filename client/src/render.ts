@@ -18,6 +18,7 @@ export class Renderer {
 
 	_blinkAnimationCounter: number;
 	_previousTimeStamp: number;
+	_currentAttackAnimation: { attackerId: string, defenderId: string, damage: number }[] | undefined;
 
 	constructor(gameMap: GameMap, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		this._map = gameMap;
@@ -43,8 +44,10 @@ export class Renderer {
 		});
 		this._loader.load();
 
-		this._blinkAnimationCounter = 0
-		this._previousTimeStamp = 0
+		this._blinkAnimationCounter = 0;
+		this._previousTimeStamp = 0;
+		this._currentAttackAnimation = undefined;
+		this._currentAttackAnimationTimer = 0;
 	}
 
 	draw(now: number) {
@@ -60,6 +63,9 @@ export class Renderer {
 		// draw background
 		this._ctx.fillStyle = "rgb(16, 17, 18)";
 		this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+
+		// set text
+		this._ctx.font = "14px Arial";
 
 		// wait for image loading
 		if (!this._loader.finish) {
@@ -127,6 +133,14 @@ export class Renderer {
 				this._ctx.fillText('DEAD', iso.x + this._tileWidthHalf / 2, iso.y - 10);
 			}
 
+			// render damage animation
+			if (this._currentAttackAnimation !== undefined) {
+				const step = this._currentAttackAnimation[0];
+				if (step.defenderId === char.id) {
+					this._ctx.fillText("-" + step.damage, iso.x + this._tileWidthHalf / 2 + 10, iso.y - 23);
+				}
+			}
+
 			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40'), iso.x, iso.y - offsetY + movementOffset);
 		})
 
@@ -137,10 +151,30 @@ export class Renderer {
 			this._ctx.fillText('Moves: ' + this._map._playerChar?.currentMovePoints, 600, 65);
 			this._ctx.fillText('HP: ' + this._map._playerChar?.hp, 600, 80);
 		}
+
+		if (this._currentAttackAnimation !== undefined) {
+			this._currentAttackAnimationTimer += time_delta / 500
+			if (this._currentAttackAnimationTimer >= 2) {
+				const step = this._currentAttackAnimation.shift();
+				const char = this._map.getCharById(step.defenderId);
+				if (char !== undefined) {
+					char._hp -= step.damage;
+				}
+				this._currentAttackAnimationTimer = 0;
+
+				if (this._currentAttackAnimation.length === 0) {
+					this._currentAttackAnimation = undefined;
+				}
+			}
+		}
 	}
 
 	set showMapOptions(showOptions: boolean) {
 		this._showMapOptions = showOptions
+	}
+
+	startAttackAnimation(event: { history: { attackerId: string, defenderId: string, damage: number }[] }) {
+		this._currentAttackAnimation = event.history
 	}
 
 	hoverScreen(screenX: number, screenY: number) {

@@ -149,6 +149,7 @@ class App {
 				break;
 			case 'attack':
 				console.log("attack", event.data)
+				this._renderer.startAttackAnimation(event.data)
 				break;
 			default:
 				console.log("?!?!?!?!ß111elf", event.actiontype, event.data);

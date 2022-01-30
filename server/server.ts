@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 import { createClient } from 'redis';
 import { Server as SocketIO } from 'socket.io';
-import { AttacksConfig, Character } from '../both/src/character';
+import { AttacksConfig, BattleHistory, Character } from '../both/src/character';
 import { Game } from '../both/src/game';
 import { Item } from '../both/src/item';
 import { GameMap } from '../both/src/map';
@@ -271,14 +271,21 @@ log('hi!');
 			return;
 		}
 
+		const history = battleLog.history.map((history: BattleHistory) => {
+			return {
+				attackerId: history.attacker.char.id,
+				defenderId: history.defender.char.id,
+				damage: history.damage,
+			}
+		})
+
 		// broadcast
 		redisPub.publish('game:' + client.gameId, JSON.stringify({
 			actiontype: 'attack',
 			data: {
-				history: battleLog.history
+				history: history
 			}
 		}));
-		sendState(client, true);
 		log("attackChar:", "char attack.", challenger, action.attackName, challenged);
 	}
 
