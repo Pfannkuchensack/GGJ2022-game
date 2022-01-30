@@ -1,27 +1,52 @@
 html, body{
-    margin: 0;
-    height: 100%;
-    width: 100%;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+body{
+  background-color: #222;
+  color: #fff;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+#app{
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+  justify-content: space-between;
+  header {
+    position: relative;
+    border-bottom: 1px solid #000;
+    font-size: 1.2rem;
+    padding: 1.5rem;
+    font-weight: bold;
+    background-color: #1b1b1b;
+    box-shadow: 2px 2px 4px #000a;
+    box-sizing: border-box;
   }
-  body{
-    background-color: #222;
-    color: #fff;
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-  }
-  #app{
-    header {
-        height: 20px;
-        border-bottom: 1px solid #000;
-    }
 
-    //display: flex;
-    //flex-flow: column;
-    //height: 100%;
-    //width: 100%;
-    #canvas{
+  main{
+    display: flex;
+    justify-content: center;
+
+    button{
       border: none;
-      background-color: #000;
-      //aspect-ratio: 16/9;
+      padding: .5rem;
+      background-color: #1b1b1b;
+      box-shadow: 1px 1px 2px #000e;
+      margin: .5rem;
+      color: #fff;
+      cursor: pointer;
     }
   }
-  
+
+  //display: flex;
+  //flex-flow: column;
+  //height: 100%;
+  //width: 100%;
+  #canvas{
+    border: none;
+    background-color: #000;
+    //aspect-ratio: 16/9;
+  }
+}

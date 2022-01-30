@@ -6,20 +6,23 @@
 	<link rel="stylesheet" href="css/main.css">
     <body>
         <div id="app">
-            <header>
-                Header gamestuff status bar
-            </header>
-            <main>
-                <canvas id="canvas" width="800" height="600"></canvas>
-            </main>
+            <div>
+                <header>
+                    Header gamestuff status bar
+                </header>
+                <main>
+                    <canvas id="canvas" width="800" height="600"></canvas>
+                    <div>
+
+                        <h2>Actions:</h2>
+                        <button id="createChar">Create Char</button>
+                        <button id="move">Move</button>
+                        <button id="finishturn">Finish</button>
+                        <span id="info"></span>
+                    </div>
+                </main>
+            </div>
             <footer>
-                <h2>Actions:</h2>
-                <a id="createChar">Create Char</a>
-                <a id="move">Move</a>
-                <a id="finishturn">Finish</a>
-                <input id="q" type="number" value="5">
-                <input id="r" type="number" value="5">
-				<span id="info"></span>        
             </footer>
         </div>
 
