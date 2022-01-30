@@ -144,6 +144,7 @@ log('hi!');
 			const game = games[client.gameId];
 			if (!game){
 				log("socketIO[disconnect]", "game already deleted!", socket.id);
+				return;
 			}
 			const char = game.getChar(socket.id)
 			if (char !== undefined) {
