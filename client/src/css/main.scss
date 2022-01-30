@@ -3,11 +3,22 @@ html, body{
   height: 100%;
   width: 100%;
 }
+
 body{
   background-color: #222;
   color: #fff;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Mono, Monospace, monospace;
 }
+
+.hidden{
+  display: none;
+}
+
+$shadow50: 1px 1px 2px #000e;
+
+$blockShadow100: 4px 4px #0004;
+$blockShadow200: 8px 8px #0004;
+
 #app{
   display: flex;
   flex-flow: column;
@@ -21,32 +32,47 @@ body{
     padding: 1.5rem;
     font-weight: bold;
     background-color: #1b1b1b;
-    box-shadow: 2px 2px 4px #000a;
+    box-shadow: $blockShadow200;
     box-sizing: border-box;
   }
 
   main{
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    margin: 2rem 1rem;
 
-    button{
+    #canvas{
       border: none;
-      padding: .5rem;
-      background-color: #1b1b1b;
-      box-shadow: 1px 1px 2px #000e;
-      margin: .5rem;
-      color: #fff;
-      cursor: pointer;
+      background-color: #000;
+      //aspect-ratio: 16/9;
+      box-shadow: $blockShadow200;
+      max-width: 100%;
+    }
+
+    .actions{
+      margin: 2rem;
+      button{
+        border: none;
+        padding: .5rem 1rem;
+        background-color: #111;
+        box-shadow: $blockShadow100;
+        margin: .5rem;
+        color: #fff;
+        cursor: pointer;
+        transition: all .4s;
+        &:hover{
+          box-shadow: $blockShadow200;
+        }
+      }
     }
   }
-
-  //display: flex;
-  //flex-flow: column;
-  //height: 100%;
-  //width: 100%;
-  #canvas{
-    border: none;
-    background-color: #000;
-    //aspect-ratio: 16/9;
+  footer{
+    padding: 1.5rem;
+    background-color: #1b1b1b;
+    font-size: .8rem;
+    a{
+      color: #fff;
+    }
   }
 }
