@@ -19,6 +19,7 @@ export class Renderer {
 	_blinkAnimationCounter: number;
 	_previousTimeStamp: number;
 	_currentAttackAnimation: { attackerId: string, defenderId: string, damage: number }[] | undefined;
+	_currentAttackAnimationTimer: number;
 
 	constructor(gameMap: GameMap, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		this._map = gameMap;
@@ -156,9 +157,11 @@ export class Renderer {
 			this._currentAttackAnimationTimer += time_delta / 500
 			if (this._currentAttackAnimationTimer >= 2) {
 				const step = this._currentAttackAnimation.shift();
-				const char = this._map.getCharById(step.defenderId);
-				if (char !== undefined) {
-					char._hp -= step.damage;
+				if (step !== undefined) {
+					const char = this._map.getCharById(step.defenderId);
+					if (char !== undefined) {
+						char._hp -= step.damage;
+					}
 				}
 				this._currentAttackAnimationTimer = 0;
 

@@ -9,6 +9,7 @@
     "/dist/assets/jet_blue.png": "/dist/assets/jet_blue.png",
     "/dist/assets/jet_blue_E.png": "/dist/assets/jet_blue_E.png",
     "/dist/assets/jet_blue_E_40.png": "/dist/assets/jet_blue_E_40.png",
+    "/dist/assets/jet_blue_E_40_shadow.png": "/dist/assets/jet_blue_E_40_shadow.png",
     "/dist/assets/jet_blue_N.png": "/dist/assets/jet_blue_N.png",
     "/dist/assets/jet_blue_S.png": "/dist/assets/jet_blue_S.png",
     "/dist/assets/jet_blue_W.png": "/dist/assets/jet_blue_W.png",
@@ -30,6 +31,5 @@
     "/dist/assets/level_up.mp3": "/dist/assets/level_up.mp3",
     "/dist/assets/pick_up.mp3": "/dist/assets/pick_up.mp3",
     "/dist/assets/tile.png": "/dist/assets/tile.png",
-    "/dist/assets/tile_ground.png": "/dist/assets/tile_ground.png",
-    "/dist/assets/jet_blue_E_40_shadow.png": "/dist/assets/jet_blue_E_40_shadow.png"
+    "/dist/assets/tile_ground.png": "/dist/assets/tile_ground.png"
 }
