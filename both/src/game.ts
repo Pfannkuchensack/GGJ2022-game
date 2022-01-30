@@ -1,5 +1,5 @@
 import { AttacksConfig, BattleLog, Character } from './character';
-import { GameMap, neighborPositions } from './map';
+import { GameMap } from './map';
 
 export class Game {
 	_gameId: string;
@@ -51,7 +51,7 @@ export class Game {
 	getChar(charId: string): Character | undefined {
 		for (let index = 0; index < this._chars.length; index++) {
 			if (this._chars[index].id === charId) {
-				return this._chars[index]			
+				return this._chars[index]
 			}
 		}
 
@@ -102,13 +102,24 @@ export class Game {
 		}
 
 		this._map.neighborsMovepoints(char.position)
-		
+
+		const neighborPositions = [
+			[-1, -1],
+			[0, -1],
+			[1, -1],
+			[1, 0],
+			[1, 1],
+			[0, 1],
+			[-1, 1],
+			[-1, 0],
+		] as number[][]
+
 		let found = false;
 		for (let index = 0; index < neighborPositions.length; index++) {
 			const neighbor = neighborPositions[index];
-			
+
 			if (nextPos.q === char.position.q + neighbor[0] && nextPos.r === char.position.r + neighbor[1]) {
-				found = true;				
+				found = true;
 			}
 		}
 

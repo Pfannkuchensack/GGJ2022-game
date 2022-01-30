@@ -3,17 +3,6 @@
 import { Character } from "./character";
 import { Tile, TileStore } from "./tile";
 
-export const neighborPositions = [
-	[-1, -1],
-	[0, -1],
-	[1, -1],
-	[1, 0],
-	[1, 1],
-	[0, 1],
-	[-1, 1],
-	[-1, 0],
-] as number[][]
-
 export class GameMap {
 	_chars: Character[];
 	_tiles: TileStore;
@@ -51,12 +40,6 @@ export class GameMap {
 		}
 
 		return tile.movementCost;
-	}
-
-	neighborsMovepoints(pos: { q: number, r: number }): number[][] {
-		return neighborPositions.map((neighbor: number[]) => {
-			return [pos.q, pos.r, this.neededMovepoints({ q: pos.q + neighbor[0], r: pos.r + neighbor[1] })]
-		});
 	}
 
 	getTile(pos: { q: number, r: number }): Tile | undefined {

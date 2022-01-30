@@ -60,9 +60,21 @@ export class Renderer {
 		if (this._map._playerChar !== undefined) {
 			const currentChar = this._map._playerChar;
 
-			this._map.neighborsMovepoints(currentChar.position).forEach((neighbor: number[]) => {
-				if (neighbor[2] > 0) {
-					const screen = this.mapToScreen(currentChar.position.q + neighbor[0], currentChar.position.r + neighbor[1]);
+			const neighborPositions = [
+				[-1, -1],
+				[0, -1],
+				[1, -1],
+				[1, 0],
+				[1, 1],
+				[0, 1],
+				[-1, 1],
+				[-1, 0],
+			] as number[][]
+
+			neighborPositions.forEach((neighbor: number[]) => {
+				const pos = { q: currentChar.position.q + neighbor[0], r: currentChar.position.r + neighbor[1] }
+				if (this._map.neededMovepoints(pos)) {
+					const screen = this.mapToScreen(pos.q, pos.r);
 					this._ctx.drawImage(this._cursor_action, screen.x, screen.y - offsetY);
 				}
 			})
@@ -80,11 +92,11 @@ export class Renderer {
 		})
 
 		this._ctx.fillStyle = "rgb(255, 255, 255)";
-		if(this._map._playerChar !== undefined) {
-			this._ctx.fillText('Spieler: ' +  this._map._playerChar?.id, 600, 50);
-			this._ctx.fillText('Moves: ' +  this._map._playerChar?.currentMovePoints, 600, 65);
-			this._ctx.fillText('Moves: ' +  this._map._playerChar?.position.q, 600, 80);
-			this._ctx.fillText('Moves: ' +  this._map._playerChar?.position.r, 600, 95);
+		if (this._map._playerChar !== undefined) {
+			this._ctx.fillText('Spieler: ' + this._map._playerChar?.id, 600, 50);
+			this._ctx.fillText('Moves: ' + this._map._playerChar?.currentMovePoints, 600, 65);
+			this._ctx.fillText('Moves: ' + this._map._playerChar?.position.q, 600, 80);
+			this._ctx.fillText('Moves: ' + this._map._playerChar?.position.r, 600, 95);
 		}
 	}
 
