@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
-import { GameMap } from '../../both/src/map';
 import { Character } from '../../both/src/character';
-import { Renderer } from './render'
+import { GameMap } from '../../both/src/map';
+import { Renderer } from './render';
 
 window.addEventListener('load', () => {
 	'use strict';
@@ -83,9 +83,11 @@ class App {
 		switch (event.actiontype) {
 			case 'state':
 				if (event.data.currentPlayer == this._socket.id) {
+					this._renderer.showMapOptions = true;
 					(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du bist dran';
 				}
 				else {
+					this._renderer.showMapOptions = false;
 					(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du musst warten';
 				}
 				let insertedids = [] as string[];
