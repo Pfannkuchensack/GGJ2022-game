@@ -111,6 +111,11 @@ export class Game {
 			return false;
 		}
 
+		// face direction
+		const vectorX = nextPos.q - char.position.q;
+		const vectorY = nextPos.r - char.position.r;
+		char.setDirection(vectorX, vectorY);
+
 		char.currentMovePoints = char.currentMovePoints - neededMovepoints;
 		char.setPosition(nextPos.q, nextPos.r);
 

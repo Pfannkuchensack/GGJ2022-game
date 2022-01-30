@@ -283,6 +283,8 @@ log('hi!');
 		redisPub.publish('game:' + client.gameId, JSON.stringify({
 			actiontype: 'attack',
 			data: {
+				challengerDirection: challenger.direction,
+				challengedDirection: challenged.direction,
 				history: history
 			}
 		}));

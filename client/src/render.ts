@@ -41,6 +41,12 @@ export class Renderer {
 			tile_ground: 'assets/tile_ground.png',
 			jet_blue_E_40: 'assets/jet_blue_E_40.png',
 			jet_blue_E_40_shadow: 'assets/jet_blue_E_40_shadow.png',
+			jet_blue_N_40: 'assets/jet_blue_N_40.png',
+			jet_blue_N_40_shadow: 'assets/jet_blue_N_40_shadow.png',
+			jet_blue_S_40: 'assets/jet_blue_S_40.png',
+			jet_blue_S_40_shadow: 'assets/jet_blue_S_40_shadow.png',
+			jet_blue_W_40: 'assets/jet_blue_W_40.png',
+			jet_blue_W_40_shadow: 'assets/jet_blue_W_40_shadow.png',
 			cursor_action: 'assets/cursor_action.png',
 			cursor_hover: 'assets/cursor_hover.png',
 			cursor_attack: 'assets/cursor_attack.png',
@@ -137,10 +143,10 @@ export class Renderer {
 				const modulo = this._blinkAnimationCounter % 4
 				movementOffset = ((modulo >= 2) ? 4 - modulo : modulo)
 
-				this._ctx.drawImage(this._loader.getImage('jet_blue_E_40_shadow'), iso.x, iso.y - offsetY);
+				this._ctx.drawImage(this._loader.getImage('jet_blue_'+char.direction+'_40_shadow'), iso.x, iso.y - offsetY);
 			}
 
-			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40'), iso.x, iso.y - offsetY + movementOffset);
+			this._ctx.drawImage(this._loader.getImage('jet_blue_'+char.direction+'_40'), iso.x, iso.y - offsetY + movementOffset);
 		})
 
 		// draw char ui

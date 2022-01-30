@@ -155,6 +155,15 @@ class App {
 			case 'attack':
 				console.log("attack", event.data)
 				this._renderer.startAttackAnimation(event.data)
+
+				if (event.data.history.length > 0) {
+					const challenger = this._map.getCharById(event.data.history[0].attackerId)
+					const challenged = this._map.getCharById(event.data.history[0].defenderId)
+
+					challenger._direction = event.data.challengerDirection
+					challenged._direction = event.data.challengedDirection
+				}
+
 				if (this._map._playerChar !== undefined) {
 					this._map._playerChar._remaining_attacks--;
 				}

@@ -52,6 +52,7 @@ export class Character {
     _r: number;
     _id: string;
     _remaining_attacks: number;
+    _direction: string;
 
     constructor(id: string, level: number, xp: number, hp: number, movePoints: number) {
         this._level = level;
@@ -73,6 +74,7 @@ export class Character {
         this._r = 0;
         this._id = id;
         this._remaining_attacks = 1;
+        this._direction = 'N';
     }
 
     get export(): any {
@@ -87,7 +89,8 @@ export class Character {
             q: this._q,
             r: this._r,
             id: this._id,
-            remaining_attacks: this._remaining_attacks
+            remaining_attacks: this._remaining_attacks,
+            direction: this._direction
         }
     }
 
@@ -103,6 +106,7 @@ export class Character {
         this._r = data.r;
         this._id = data.id;
         this._remaining_attacks = data.remaining_attacks;
+        this._direction = data.direction;
     }
 
     get id() {
@@ -141,6 +145,29 @@ export class Character {
 
     set baseMovePoints(movePoints: number) {
         this._baseMovePoints = movePoints;
+    }
+
+    get direction() {
+        return this._direction;
+    }
+
+    setDirection(vectorX: number, vectorY: number) {
+        if (vectorX !== 0) {
+            if (vectorX < 0) {
+                this._direction = 'W';
+            } else {
+                this._direction = 'E';
+            }
+        } else if (vectorY !== 0) {
+            if (vectorY < 0) {
+                this._direction = 'N';
+            } else {
+                this._direction = 'S';
+            }
+        } else {
+            // all is 0
+            this._direction = 'N';
+        }
     }
 
     get remainingAttacks() {
@@ -296,10 +323,19 @@ export class Character {
             }
         }
 
+        // face direction
+        const challengerVectorX = challenged.char.position.q - challenger.char.position.q;
+        const challengerVectorY = challenged.char.position.r - challenger.char.position.r;
+        const challengedVectorX = challenger.char.position.q - challenged.char.position.q;
+        const challengedVectorY = challenger.char.position.r - challenged.char.position.r;
+
         if (!dryRun) {
             challenger.char._hp = Math.max(0, challenger.health)
             challenged.char._hp = Math.max(0, challenged.health)  
-            challenger.char._remaining_attacks--;          
+            challenger.char._remaining_attacks--;
+
+            challenger.char.setDirection(challengerVectorX, challengerVectorY);
+            challenged.char.setDirection(challengedVectorX, challengedVectorY);
         }
 
         return {
