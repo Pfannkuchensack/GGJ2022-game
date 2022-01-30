@@ -3,6 +3,17 @@
 import { Character } from "./character";
 import { Tile, TileStore } from "./tile";
 
+export const neighborPositions = [
+	[-1, -1],
+	[0, -1],
+	[1, -1],
+	[1, 0],
+	[1, 1],
+	[0, 1],
+	[-1, 1],
+	[-1, 0],
+] as number[][]
+
 export class GameMap {
 	_chars: Character[];
 	_tiles: TileStore;
@@ -26,39 +37,27 @@ export class GameMap {
 	isPositionFree(pos: { q: number, r: number }): boolean {
 		for (let index = 0; index < this._chars.length; index++) {
 			if (this._chars[index].equalPosition(pos)) {
-				return false
+				return false;
 			}
 		}
-		return true
+		return true;
 	}
 
 	// neededMovepoints return 0 if not possible to move on this tile
 	neededMovepoints(pos: { q: number, r: number }): number {
 		const tile = this.getTile(pos)
 		if (tile === undefined) {
-			return 0
+			return 0;
 		}
 
 		return tile.movementCost;
 	}
 
 	neighborsMovepoints(pos: { q: number, r: number }): number[][] {
-		const positions = [
-			[-1, -1],
-			[0, -1],
-			[1, -1],
-			[1, 0],
-			[1, 1],
-			[0, 1],
-			[-1, 1],
-			[-1, 0],
-		] as number[][]
-
-		return positions.map((neighbor: number[]) => {
+		return neighborPositions.map((neighbor: number[]) => {
 			neighbor.push(this.neededMovepoints({ q: pos.q + neighbor[0], r: pos.r + neighbor[1] }))
-
 			return neighbor
-		})
+		});
 	}
 
 	getTile(pos: { q: number, r: number }): Tile | undefined {

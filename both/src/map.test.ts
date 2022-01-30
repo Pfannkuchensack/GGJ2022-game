@@ -85,4 +85,9 @@ describe('map', () => {
 			assert.equal(map.neededMovepoints({ q: 5, r: 5000 }), 0)
 		})
 	})
+
+	it('neighbors movepoints', () => {
+		const map = new GameMap()
+		assert.equal(map.neighborsMovepoints({ q: 0, r: 0}),2)
+	})
 })

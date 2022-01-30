@@ -1,5 +1,5 @@
 import { AttacksConfig, BattleLog, Character } from './character';
-import { GameMap } from './map';
+import { GameMap, neighborPositions } from './map';
 
 export class Game {
 	_gameId: string;
@@ -101,8 +101,19 @@ export class Game {
 			return false
 		}
 
-		if ([char.position.q - 1, char.position.q, char.position.q + 1].indexOf(nextPos.q) === -1 || [char.position.r - 1, char.position.r, char.position.r + 1].indexOf(nextPos.q) === -1) {
-			console.log('field not neighboring!');
+		this._map.neighborsMovepoints(char.position)
+		
+		let found = false;
+		for (let index = 0; index < neighborPositions.length; index++) {
+			const neighbor = neighborPositions[index];
+			
+			if (nextPos.q === char.position.q + neighbor[0] && nextPos.r === char.position.r + neighbor[1]) {
+				found = true;				
+			}
+		}
+
+		if (!found) {
+			//console.log('field not neighboring!');
 			return false;
 		}
 

@@ -57,20 +57,17 @@ export class Renderer {
 			})
 		});
 
-<<<<<<< HEAD
 		if (this._map._playerChar !== undefined) {
-			const currentChar = this._map._playerChar
+			const currentChar = this._map._playerChar;
 
 			this._map.neighborsMovepoints(currentChar.position).forEach((neighbor: number[]) => {
 				if (neighbor[2] > 0) {
-					const screen = this.mapToScreen(currentChar.position.q + neighbor[0], currentChar.position.q + neighbor[1]);
+					const screen = this.mapToScreen(currentChar.position.q + neighbor[0], currentChar.position.r + neighbor[1]);
 					this._ctx.drawImage(this._cursor_action, screen.x, screen.y - offsetY);
 				}
 			})
 		}
 		
-=======
->>>>>>> 3472bf7a1942d83fc2c228b858042329f871bd96
 		if (this._hover_tile) {
 			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
 			this._ctx.drawImage(this._cursor_hover, screen.x, screen.y - offsetY);
@@ -86,6 +83,8 @@ export class Renderer {
 		if(this._map._playerChar !== undefined) {
 			this._ctx.fillText('Spieler: ' +  this._map._playerChar?.id, 600, 50);
 			this._ctx.fillText('Moves: ' +  this._map._playerChar?.currentMovePoints, 600, 65);
+			this._ctx.fillText('Moves: ' +  this._map._playerChar?.position.q, 600, 80);
+			this._ctx.fillText('Moves: ' +  this._map._playerChar?.position.r, 600, 95);
 		}
 	}
 

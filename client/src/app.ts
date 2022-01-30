@@ -126,6 +126,7 @@ class App {
 				const oldChar = this._map.getCharById(event.data.id)
 				if (oldChar !== undefined) {
 					oldChar.import(event.data)
+					console.log(oldChar, oldChar.position);
 				}
 				break;
 			default:
