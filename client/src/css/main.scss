@@ -58,6 +58,7 @@ button{
 
     .canvasWrapper{
       position: relative;
+      display: flex;
       #canvas{
         position: relative;
         border: none;
@@ -72,14 +73,22 @@ button{
         width: 100%;
         top: 0;
         left: 0;
+        transition: all .8s;
+        background-color: #222a;
+        opacity: 0;
+        pointer-events: none;
         &.active{
-          background-color: #222a;
+          opacity: 1;
+          pointer-events: all;
         }
         .buttonWrapper{
           position: absolute;
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
+          display: flex;
+          flex-flow: column;
+          justify-content: center;
           button{
             background-color: #266379;
             font-size: 1.2rem;
@@ -87,10 +96,22 @@ button{
           }
         }
       }
-    }
-
-    .actions{
-      margin: 2rem;
+      .actions{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-size: .8rem;
+        margin: 1rem;
+        display: block;
+        button{
+          position: relative;
+          background-color: #266379;
+        }
+        #info{
+          position: relative;
+          margin: 1rem .5rem;
+        }
+      }
     }
   }
   footer{

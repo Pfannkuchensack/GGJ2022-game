@@ -12,19 +12,18 @@
                 <main>
                     <div class="canvasWrapper">
                         <canvas id="canvas" width="800" height="600"></canvas>
-                        <div class="overlay active">
+                        <div class="actions">
+                            <span id="info"></span><br>
+                            <button id="createChar" class="hidden">Create</button>
+                            <button id="move">Move</button>
+                            <button id="finishturn">Finish</button>
+                        </div>
+                        <div id="overlay" class="overlay active">
                             <div class="buttonWrapper">
-                                <button>Start</button>
+                                <h2>Start Game</h2>
+                                <button id="start">Start</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="actions">
-                        <h3>Actions:</h3>
-                        <button id="createChar">Create</button>
-                        <button id="move">Move</button>
-                        <button id="finishturn">Finish</button>
-                        <br>
-                        <p id="info"></p>
                     </div>
                 </main>
             </div>
