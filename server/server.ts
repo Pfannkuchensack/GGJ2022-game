@@ -215,7 +215,7 @@ log('hi!');
 		char.setPosition(2, 2);
 		while(!game._map.isPositionFree(char.position))
 		{
-			char.setPosition(2, 2);
+			char.setPosition(Math.round(Math.random() * 8), Math.round(Math.random() * 8));
 		}
 
 		char.addAttack(action.attack, gameConfig);

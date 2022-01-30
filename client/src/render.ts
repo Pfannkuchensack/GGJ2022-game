@@ -164,7 +164,7 @@ export class Renderer {
 			}
 
 			if (!char.isDead) {
-				this._ctx.fillStyle = "black";
+				this._ctx.fillStyle = "white";
 				this._ctx.fillText(char.name, iso.x + this._tileWidthHalf / 2, iso.y - 28);
 				this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 13);
 				this._ctx.beginPath();
