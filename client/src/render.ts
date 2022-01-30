@@ -159,7 +159,7 @@ export class Renderer {
 				if (step.defenderId === char.id) {
 					const damageOffsetY = mapRange(this._currentAttackAnimationTimer, 0, 2, 0, 10);
 					this._ctx.fillStyle = "black";
-					this._ctx.fillText("-" + step.damage, iso.x + this._tileWidthHalf / 2 + 10, iso.y - 23 - damageOffsetY);
+					this._ctx.fillText("-" + step.damage, iso.x + this._tileWidthHalf / 2 + 10, iso.y - 40 - damageOffsetY);
 				}
 			}
 
