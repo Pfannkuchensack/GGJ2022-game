@@ -10,20 +10,26 @@
             <div>
                 <header>GGJ-SpaceMatrix</header>
                 <main>
-                    <canvas id="canvas" width="800" height="600"></canvas>
-                    <div class="actions">
-                        <h3>Actions:</h3>
-                        <button id="createChar">Create</button>
-                        <button id="move">Move</button>
-                        <button id="finishturn">Finish</button>
-                        <br>
-                        <p id="info"></p>
+                    <div class="canvasWrapper">
+                        <canvas id="canvas" width="800" height="600"></canvas>
+                        <div class="actions">
+                            <span id="info"></span><br>
+                            <button id="createChar" class="hidden">Create</button>
+                            <button id="move">Move</button>
+                            <button id="finishturn">Finish</button>
+                        </div>
+                        <div id="overlay" class="overlay active">
+                            <div class="buttonWrapper">
+                                <h2>Start Game</h2>
+                                <button id="start">Start</button>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>
             <footer>
-                <a href="https://github.com/Pfannkuchensack/GGJ2022-game">GitHub Repository</a> -
-                <a href="https://github.com/Pfannkuchensack/GGJ2022-game/issues">Issues</a>
+                <a target="_blank" href="https://github.com/Pfannkuchensack/GGJ2022-game">GitHub Repository</a> -
+                <a target="_blank" href="https://github.com/Pfannkuchensack/GGJ2022-game/issues">Issues</a>
             </footer>
         </div>
 

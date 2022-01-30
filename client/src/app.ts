@@ -3,6 +3,8 @@ import { Character } from '../../both/src/character';
 import { GameMap } from '../../both/src/map';
 import { Renderer } from './render';
 
+const $ = document.getElementById;
+
 window.addEventListener('load', () => {
 	'use strict';
 
@@ -100,11 +102,11 @@ class App {
 			case 'state':
 				if (event.data.currentPlayer == this._socket.id) {
 					this._renderer.showMapOptions = true;
-					(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du bist dran';
+					(document.getElementById('info') as HTMLSpanElement).innerHTML = 'you are next';
 				}
 				else {
 					this._renderer.showMapOptions = false;
-					(document.getElementById('info') as HTMLSpanElement).innerHTML = 'Du musst warten';
+					(document.getElementById('info') as HTMLSpanElement).innerHTML = 'you must wait';
 				}
 				let insertedids = [] as string[];
 				event.data.chars.forEach((charData: any) => {
@@ -184,6 +186,12 @@ function startApp(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) 
 	const createCharBtn = document.getElementById('createChar') as HTMLCanvasElement;
 	createCharBtn.addEventListener('click', () => {
 		app.createChar('TestDerErste', 'hallo', 'attack1');
+	});
+
+	const startBtn = document.getElementById('start') as HTMLCanvasElement;
+	startBtn.addEventListener('click', () => {
+		app.createChar('TestDerErste', 'hallo', 'attack1');
+		(document.getElementById('overlay') as HTMLCanvasElement).classList.remove('active');
 	});
 
 	const moveBtn = document.getElementById('move') as HTMLCanvasElement;
