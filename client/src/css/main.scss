@@ -29,13 +29,42 @@ button{
   }
 }
 
-label {
-  display: block;
-  margin: 6px 0;
+input{
+  border: none;
+  padding: .5rem 1rem;
+  background-color: #222;
+  box-shadow: $blockShadow100;
+  margin: 2rem .5rem .5rem .5rem;
+  color: #fff;
+  transition: all .2s;
+  outline: none;
+  &:focus{
+    background-color: #263136;
+    border: none;
+  }
 }
 
-#start {
-  margin-top: 20px;
+.inputWrapper{
+  position: relative;
+
+  label.floating {
+    position: absolute;
+    display: block;
+    margin: .5rem;
+    color: #999;
+    top: 2rem;
+    transform: translate(1rem, 0);
+    transition: all 0.2s ease-out;
+    font-size: .8rem;
+    pointer-events: none;
+  }
+
+  input:focus + label.floating,
+  input:not(:placeholder-shown) + label.floating {
+    transform: translate(0, -2rem);
+    font-size: 1rem;
+    color: #fff;
+  }
 }
 
 .hidden{
@@ -103,6 +132,9 @@ label {
             font-size: 1.2rem;
             font-weight: bold;
           }
+        }
+        #start{
+          margin-top: 2rem;
         }
       }
       .actions{
