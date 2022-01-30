@@ -56,21 +56,6 @@ export class Renderer {
 				this._ctx.drawImage(this._tile_ground, iso.x, iso.y - offsetY);
 			})
 		});
-
-<<<<<<< HEAD
-		if (this._map._playerChar !== undefined) {
-			const currentChar = this._map._playerChar
-
-			this._map.neighborsMovepoints(currentChar.position).forEach((neighbor: number[]) => {
-				if (neighbor[2] > 0) {
-					const screen = this.mapToScreen(currentChar.position.q + neighbor[0], currentChar.position.q + neighbor[1]);
-					this._ctx.drawImage(this._cursor_action, screen.x, screen.y - offsetY);
-				}
-			})
-		}
-		
-=======
->>>>>>> 3472bf7a1942d83fc2c228b858042329f871bd96
 		if (this._hover_tile) {
 			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
 			this._ctx.drawImage(this._cursor_hover, screen.x, screen.y - offsetY);
