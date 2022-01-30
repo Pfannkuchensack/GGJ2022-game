@@ -16,6 +16,7 @@ export class Renderer {
 	_cursor_hover: HTMLImageElement;
 	_cursor_action: HTMLImageElement;
 	_hover_tile: Tile | null;
+	_showMapOptions: boolean;
 
 	constructor(gameMap: GameMap, canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		this._map = gameMap;
@@ -30,6 +31,7 @@ export class Renderer {
 		this._cameraY = this._tileHeightHalf;
 
 		this._hover_tile = null;
+		this._showMapOptions = false;
 
 		const tile_ground = document.getElementById('tile_ground') as HTMLImageElement
 		this._tile_ground = tile_ground;
@@ -56,6 +58,31 @@ export class Renderer {
 				this._ctx.drawImage(this._tile_ground, iso.x, iso.y - offsetY);
 			})
 		});
+
+		if (this._map._playerChar !== undefined && this._showMapOptions) {
+			const currentChar = this._map._playerChar;
+
+			const neighborPositions = [
+				[-1, -1],
+				[0, -1],
+				[1, -1],
+				[1, 0],
+				[1, 1],
+				[0, 1],
+				[-1, 1],
+				[-1, 0],
+			] as number[][]
+
+			neighborPositions.forEach((neighbor: number[]) => {
+				const pos = { q: currentChar.position.q + neighbor[0], r: currentChar.position.r + neighbor[1] }
+				const neededPoints = this._map.neededMovepoints(pos);
+				if (neededPoints > 0 && neededPoints <= currentChar.currentMovePoints) {
+					const screen = this.mapToScreen(pos.q, pos.r);
+					this._ctx.drawImage(this._cursor_action, screen.x, screen.y - offsetY);
+				}
+			})
+		}
+
 		if (this._hover_tile) {
 			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
 			this._ctx.drawImage(this._cursor_hover, screen.x, screen.y - offsetY);
@@ -68,10 +95,16 @@ export class Renderer {
 		})
 
 		this._ctx.fillStyle = "rgb(255, 255, 255)";
-		if(this._map._playerChar !== undefined) {
-			this._ctx.fillText('Spieler: ' +  this._map._playerChar?.id, 600, 50);
-			this._ctx.fillText('Moves: ' +  this._map._playerChar?.currentMovePoints, 600, 65);
+		if (this._map._playerChar !== undefined) {
+			this._ctx.fillText('Spieler: ' + this._map._playerChar?.id, 600, 50);
+			this._ctx.fillText('Moves: ' + this._map._playerChar?.currentMovePoints, 600, 65);
+			this._ctx.fillText('Moves: ' + this._map._playerChar?.position.q, 600, 80);
+			this._ctx.fillText('Moves: ' + this._map._playerChar?.position.r, 600, 95);
 		}
+	}
+
+	set showMapOptions(showOptions: boolean) {
+		this._showMapOptions = showOptions
 	}
 
 	hoverScreen(screenX: number, screenY: number) {

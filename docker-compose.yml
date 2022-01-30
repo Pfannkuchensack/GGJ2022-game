@@ -1,25 +1,25 @@
-version: '3'
+version: "3"
 services:
-  server:
-    image: node:alpine
-    restart: always
-    ports:
-      - "8010:8010"
-    volumes:
-      - ./server/:/home/node/app/
-    working_dir: /home/node/app/
-    environment:
-      - NODE_ENV=production
-      - REDIS_HOST=redis
-    command: sh -c 'npm i && npm run start'
-    links:
-      - redis
-    depends_on:
-      - redis
+  # server:
+  #   image: node:alpine
+  #   restart: always
+  #   ports:
+  #     - "8010:8010"
+  #   volumes:
+  #     - ./server/:/home/node/app/
+  #   working_dir: /home/node/app/
+  #   environment:
+  #     - NODE_ENV=production
+  #     - REDIS_HOST=redis
+  #   command: sh -c 'npm i && npm run start'
+  #   links:
+  #     - redis
+  #   depends_on:
+  #     - redis
   redis:
     image: redis:alpine
-    expose:
-      - 6379
+    ports:
+      - "6379:6379"
     restart: always
     volumes:
       - ./redis_data/:/var/lib/redis/

@@ -1,11 +1,11 @@
 import express from 'express';
 import http from 'http';
-import { createClient, RedisClientType } from 'redis';
+import { createClient } from 'redis';
 import { Server as SocketIO } from 'socket.io';
+import { AttacksConfig, Character } from '../both/src/character';
 import { Game } from '../both/src/game';
-import { GameMap } from '../both/src/map';
-import { Character, AttacksConfig } from '../both/src/character';
 import { Item } from '../both/src/item';
+import { GameMap } from '../both/src/map';
 
 // log helper
 var log = function (...args: any[]) { return console.log.apply(console, ['[' + new Date().toISOString().slice(11, -5) + ']'].concat(Array.prototype.slice.call(arguments))); };
@@ -22,7 +22,7 @@ type GameList = { [key: string]: Game }
 
 // config
 const PORT = 8010;
-const HOST = '127.0.0.1';
+const REDIS_HOST = (process.env.REDIS_HOST) ? process.env.REDIS_HOST : 'redis://localhost';
 
 // game config
 const gameConfig = {
@@ -49,10 +49,10 @@ log('hi!');
 	log('create http server...');
 	const server = http.createServer(app);
 
-	log('start redis...');
+	log('start redis...', REDIS_HOST);
 	// start redis
-	const redisSub = createClient();
-	const redisPub = createClient();
+	const redisSub = createClient({ url: REDIS_HOST });
+	const redisPub = createClient({ url: REDIS_HOST });
 	redisSub.on('error', (err) => log('redis error: ', err))
 	redisPub.on('error', (err) => log('redis error: ', err))
 
