@@ -31,5 +31,6 @@
     "/dist/assets/level_up.mp3": "/dist/assets/level_up.mp3",
     "/dist/assets/pick_up.mp3": "/dist/assets/pick_up.mp3",
     "/dist/assets/tile.png": "/dist/assets/tile.png",
-    "/dist/assets/tile_ground.png": "/dist/assets/tile_ground.png"
+    "/dist/assets/tile_ground.png": "/dist/assets/tile_ground.png",
+    "/dist/assets/cursor_attack.png": "/dist/assets/cursor_attack.png"
 }

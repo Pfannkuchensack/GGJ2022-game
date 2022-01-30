@@ -43,6 +43,7 @@ export class Renderer {
 			jet_blue_E_40_shadow: 'assets/jet_blue_E_40_shadow.png',
 			cursor_action: 'assets/cursor_action.png',
 			cursor_hover: 'assets/cursor_hover.png',
+			cursor_attack: 'assets/cursor_attack.png',
 		});
 		this._loader.load();
 
@@ -109,7 +110,11 @@ export class Renderer {
 					}
 
 					const screen = this.mapToScreen(pos.q, pos.r);
-					this._ctx.drawImage(this._loader.getImage('cursor_action'), screen.x, screen.y - offsetY);
+					if (char !== undefined) {
+						this._ctx.drawImage(this._loader.getImage('cursor_attack'), screen.x, screen.y - offsetY);
+					} else {
+						this._ctx.drawImage(this._loader.getImage('cursor_action'), screen.x, screen.y - offsetY);
+					}
 				}
 			})
 		}
