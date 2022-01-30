@@ -112,9 +112,10 @@ export class Renderer {
 			const iso = this.mapToScreen(char.position.q, char.position.r);
 
 			const modulo = this._blinkAnimationCounter % 4
-			const movementOffset = ((modulo >= 2)?4-modulo:modulo)
+			const movementOffset = ((modulo >= 2) ? 4 - modulo : modulo)
 			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40_shadow'), iso.x, iso.y - offsetY);
 			this._ctx.drawImage(this._loader.getImage('jet_blue_E_40'), iso.x, iso.y - offsetY + movementOffset);
+			this._ctx.fillText('HP: ' + char.hp, iso.x + this._tileWidthHalf / 2, iso.y - 10);
 		})
 
 		// draw metadata
