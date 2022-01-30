@@ -42,6 +42,25 @@ export class GameMap {
 		return tile.movementCost;
 	}
 
+	neighborsMovepoints(pos: { q: number, r: number }): number[][] {
+		const positions = [
+			[-1, -1],
+			[0, -1],
+			[1, -1],
+			[1, 0],
+			[1, 1],
+			[0, 1],
+			[-1, 1],
+			[-1, 0],
+		] as number[][]
+
+		return positions.map((neighbor: number[]) => {
+			neighbor.push(this.neededMovepoints({ q: pos.q + neighbor[0], r: pos.r + neighbor[1] }))
+
+			return neighbor
+		})
+	}
+
 	getTile(pos: { q: number, r: number }): Tile | undefined {
 		if (pos.q < 0 || pos.q >= this._tiles.length || pos.r < 0 || pos.r >= this._tiles[pos.q].length) {
 			return undefined
