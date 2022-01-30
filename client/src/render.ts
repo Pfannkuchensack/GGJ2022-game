@@ -44,6 +44,8 @@ export class Renderer {
 	draw() {
 		const offsetY = 5
 
+		
+
 		this._ctx.fillStyle = "rgb(16, 17, 18)";
 		this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
 
@@ -55,6 +57,7 @@ export class Renderer {
 			})
 		});
 
+<<<<<<< HEAD
 		if (this._map._playerChar !== undefined) {
 			const currentChar = this._map._playerChar
 
@@ -66,6 +69,8 @@ export class Renderer {
 			})
 		}
 		
+=======
+>>>>>>> 3472bf7a1942d83fc2c228b858042329f871bd96
 		if (this._hover_tile) {
 			const screen = this.mapToScreen(this._hover_tile.position.q, this._hover_tile.position.r);
 			this._ctx.drawImage(this._cursor_hover, screen.x, screen.y - offsetY);
@@ -77,7 +82,11 @@ export class Renderer {
 			this._ctx.drawImage(this._jet_blue, iso.x, iso.y - offsetY);
 		})
 
-		
+		this._ctx.fillStyle = "rgb(255, 255, 255)";
+		if(this._map._playerChar !== undefined) {
+			this._ctx.fillText('Spieler: ' +  this._map._playerChar?.id, 600, 50);
+			this._ctx.fillText('Moves: ' +  this._map._playerChar?.currentMovePoints, 600, 65);
+		}
 	}
 
 	hoverScreen(screenX: number, screenY: number) {
